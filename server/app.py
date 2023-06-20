@@ -1,5 +1,4 @@
 from flask import make_response, jsonify, request, session
-from flask_bcrypt import Bcrypt
 
 # Local imports
 from config import app, db, api, Resource, bcrypt
@@ -114,7 +113,6 @@ def users():
 
 @app.route( '/users/<int:id>', methods=[ "GET", "DELETE", "PATCH" ] )
 def users_by_id(id):
-
     user = User.query.filter( User.id == id ).first()
     user_list = List.query.filter( List.user_id == id ).all()
     if user:
@@ -122,7 +120,7 @@ def users_by_id(id):
             user_dict =  user_to_dict( user)
             user_dict["lists"] = [list_to_dict(r) for r in user_list]
             for i in range(len(user_list)):
-                user_dict["lists"][i]["books"]= [book_in_list_to_dict(r) for r in BookInList.query.filter(BookInList.list_id == i).all()]
+                user_dict["lists"][i]["books"]= [book_in_list_to_dict(r) for r in BookInList.query.filter(BookInList.list_id == user_list[i].id).all()]
             return make_response( jsonify( user_dict ), 200 )
         
         elif request.method == "DELETE":
@@ -135,17 +133,65 @@ def users_by_id(id):
         elif request.method == "PATCH":
             user_data = request.get_json()
             for attr in user_data:
-                setattr(user, attr, user_data[attr])
-            db.session.add(user)
+                setattr( user, attr, user_data[attr] )
+            db.session.add( user )
             db.session.commit()
-            user_dict =  user_to_dict( user)
+            user_dict =  user_to_dict( user )
             user_dict["lists"] = [list_to_dict(r) for r in user_list]
             for i in range(len(user_list)):
-                user_dict["lists"][i]["books"]= [book_in_list_to_dict(r) for r in BookInList.query.filter(BookInList.list_id == i).all()]
+                user_dict["lists"][i]["books"]= [book_in_list_to_dict(r) for r in BookInList.query.filter(BookInList.list_id == user_list[i].id).all()]
             return make_response( jsonify( user_dict ), 200 )
     else:
         return make_response( "User not found.", 404 )
 
+@app.route( '/users/lists/<int:id>', methods=[ "GET", "DELETE", "PATCH" ])
+def lists_by_id(id):
+    list = List.query.filter( List.id == id ).first()
+    if list:
+        if request.method == "GET":
+            list_dict = list_to_dict(list)
+            list_dict["books"]= [book_in_list_to_dict(r) for r in BookInList.query.filter(BookInList.list_id == id).all()]
+            return make_response( jsonify( list_dict ), 200 )
+        
+        elif request.method == "DELETE":
+            List.query.filter_by( id = id ).delete()
+            BookInList.query.filter_by( list_id = id ).delete()
+            db.session.delete( list )
+            db.session.commit()
+            return make_response("", 204)
 
+        elif request.method == "PATCH":
+            list_data = request.get_json()
+            for attr in list_data:
+                setattr(list, attr, list_data[attr])
+            db.session.add(list)
+            db.session.commit()
+            list_dict = list_to_dict(list)
+            list_dict["books"]= [book_in_list_to_dict(r) for r in BookInList.query.filter(BookInList.list_id == id).all()]
+            return make_response( jsonify( list_dict ), 200 )
+    else:
+        return make_response( "List not found.", 404 )
+@app.route( '/booksInLists', methods=[ "POST" ])
+def Books_in_List():
+    if request.method == "POST":
+        book_id = request.get_json()[ 'book_id' ]
+        list_id = request.get_json()[ 'list_id' ]
+        user_id = request.get_json()[ 'user_id' ]
+
+        new_book_in_list = BookInList(
+            book_id = book_id,
+            list_id = list_id,
+            user_id = user_id
+        )
+        db.session.add( new_book_in_list )
+        db.session.commit()
+        return make_response( jsonify( book_in_list_to_dict( new_book_in_list ) ), 201 )
+@app.route( '/booksInLists/<int:id>', methods=[ "DELETE" ])
+def Books_in_List_by_id(id):
+    if request.method == "DELETE":
+        book = BookInList.query.filter_by( id = id ).first()
+        db.session.delete( book )
+        db.session.commit()
+        return "", 204
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
