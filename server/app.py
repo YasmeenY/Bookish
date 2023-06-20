@@ -58,6 +58,9 @@ class Login( Resource ):
         
         user = User.query.filter( User.username == username ).first()
 
+        if not user:
+            return {"error": "user doesn't exist"}, 404
+
         if user.authenticate( password ):
             session[ 'user_id' ] = user.id
             return user_to_dict( user ), 200

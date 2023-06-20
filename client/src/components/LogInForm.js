@@ -14,8 +14,14 @@ function LogInForm() {
             window.location.href = "/profile"
         }
         catch (error) {
-            if(error.response.status === 401){
-                alert("Invalid Credentials")
+            if(error.response.status === 404){
+                alert("User doesn't exist")
+            }
+            else if (error.response.status === 400){
+                alert("Missing 'username' or 'password'.")
+            }
+            else {
+                alert("Incorrect password")
             }
         }
     }

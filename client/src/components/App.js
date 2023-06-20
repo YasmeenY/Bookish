@@ -7,10 +7,26 @@ import Home from "./Home";
 import Sign from './Sign';
 import Profile from "./Profile"
 import ThemeContextProvider from '../context/ThemeContext';
+import Search from "./Search"
 
 function App() {
   const [user, setUser] = useState("")
   const [userData, setUserData] = useState("")
+  const [search, setSearch] = useState("")
+  const [bookS, setBookS] = useState("")
+
+  function SearchSetter(search){
+    setSearch(search)
+  }
+
+  function handleSearch(){
+      const url = `https://openlibrary.org/search.json?title=${encodeURIComponent(search.toLowerCase()).replace(/%20/g, "+")}`
+          fetch(url)
+          .then(r=>r.json())
+          .then(data => setBookS(data))
+  }
+
+  console.log(bookS)
 
   useEffect(() => {
     (async () => {
@@ -54,6 +70,14 @@ function App() {
                 data = {userData}
                 setUserData = {setUser}
                 user = {user}
+              />
+            </Route>
+            <Route exact path="/Search">
+              <Search
+                SearchSetter = {SearchSetter}
+                handleSearch = {handleSearch}
+                bookS = {bookS}
+                search = {search}
               />
             </Route>
           </Switch>
