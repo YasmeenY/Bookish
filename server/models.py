@@ -1,6 +1,5 @@
 from sqlalchemy.orm import validates
 from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy.ext.hybrid import hybrid_property
 from config import db, bcrypt
 from sqlalchemy_serializer import SerializerMixin
 
@@ -32,10 +31,10 @@ class Book( db.Model, SerializerMixin ):
     publisher = db.Column( db.String )
     language = db.Column( db.String )
     isbn = db.Column( db.String )
-    excerpts = db.Column( db.String )
-    preview_url = db.Column( db.String )
     publish_date  = db.Column( db.String )
-    open_library_id = db.Column( db.String )
+    rating = db.Column( db.Integer )
+    rating_count = db.Column( db.Integer )
+    author = db.Column( db.String )
     cover = db.Column( db.String, default="https://islandpress.org/sites/default/files/default_book_cover_2015.jpg" )
 
     book_authors = db.relationship( "BookAuthor", backref = "book")

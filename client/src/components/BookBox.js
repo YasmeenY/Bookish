@@ -1,7 +1,7 @@
 function BookBox({cover, title}) {
     return (
         <div className="Sign">
-            <img src={cover}></img>
+            <img className='cover' src={cover} alt={title}></img>
             <h2>{title}</h2>
         </div>
     )}

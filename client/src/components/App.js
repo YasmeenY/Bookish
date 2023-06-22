@@ -7,37 +7,79 @@ import Home from "./Home";
 import Sign from './Sign';
 import Profile from "./Profile"
 import ThemeContextProvider from '../context/ThemeContext';
-import Search from "./Search"
+import Search from "./Search";
+import BookDetails from './BookDetails';
+import AuthorDetails from './AuthorDetails';
+import AuthorWorks from './AuthorWorks';
 
 function App() {
   const [user, setUser] = useState("")
   const [userData, setUserData] = useState("")
   const [search, setSearch] = useState("")
   const [bookS, setBookS] = useState("")
+  const [link, setLink] = useState("")
+  const [bookDetails, setBookDetails] = useState("")
+  const [authorS, setAuthorS] = useState("")
+  const [authorDetails, setAuthorDetails] = useState("")
+  const [works, setWorks] = useState("")
+  const [authorBook, setAuthorBook] = useState("")
+
+  function handleBookDetails(book){
+    fetch(`https://openlibrary.org${book.key}.json`)
+    .then(r=>r.json())
+    .then(data => {
+      setBookDetails(data)
+    })
+  }
+
+  function handleAuthorBooks(book){
+    const url = `https://openlibrary.org/search.json?title=${encodeURIComponent(book.toLowerCase())}`
+    fetch(url)
+    .then(r=>r.json())
+    .then(data => setAuthorBook(data))
+  }
 
   function SearchSetter(search){
     setSearch(search)
   }
 
-  function handleSearch(){
-      const url = `https://openlibrary.org/search.json?title=${encodeURIComponent(search.toLowerCase()).replace(/%20/g, "+")}`
-          fetch(url)
-          .then(r=>r.json())
-          .then(data => setBookS(data))
+  function linkSetter(search){
+    setLink(search)
   }
 
-  console.log(bookS)
+  function handleSearch(){
+      const url = `https://openlibrary.org/search.json?title=${encodeURIComponent(search.toLowerCase())}`
+      fetch(url)
+      .then(r=>r.json())
+      .then(data => setBookS(data))
+  }
+
+  function handleWorks(author){
+    const url = `https://openlibrary.org/authors/${author}/works.json`
+    fetch(url)
+    .then(r=>r.json())
+    .then(data => setWorks(data))
+  }
+
+  function handleAuthorDetails(author){
+    const url = `https://openlibrary.org/authors/${author}.json`
+    fetch(url)
+    .then(r=>r.json())
+    .then(data => setAuthorDetails(data))
+  }
+
+  function handleAuthorSearch(){
+    const url = `https://openlibrary.org/search/authors.json?q=${encodeURIComponent(search.toLowerCase())}`
+    fetch(url)
+    .then(r=>r.json())
+    .then(data => setAuthorS(data))
+  }
 
   useEffect(() => {
     (async () => {
-          try {
-              const response = await httpClient.get("//localhost:5555/check_session")
-              setUser(response.data)
-          }
-          catch (error) {
-              console.log("Not authenticated")
-          }
-        }) ()
+        const response = await httpClient.get("//localhost:5555/check_session")
+        setUser(response.data)
+      }) ()
   }, [])
 
   useEffect(() => {
@@ -52,9 +94,7 @@ function App() {
       }) ()
   }, [user])
 
-  if(user){
-    console.log(user)
-  }
+
   return (
     <div className="App">
       <ThemeContextProvider>
@@ -78,8 +118,70 @@ function App() {
                 handleSearch = {handleSearch}
                 bookS = {bookS}
                 search = {search}
+                linkSetter = {linkSetter}
+                handleBookDetails = {handleBookDetails}
+                handleAuthorSearch = {handleAuthorSearch}
+                authorS = {authorS}
+                handleAuthorDetails = {handleAuthorDetails}
+                authorDetails = {authorDetails}
+                handleWorks = {handleWorks}
               />
             </Route>
+            {bookS.docs?.map((book, index)=>{
+              return (
+                <Route key={index} exact path={link}>
+                  <BookDetails
+                    book = {book}
+                    bookDetails={bookDetails}
+                    cover = {
+                      typeof bookDetails["covers"] === "undefined" 
+                      ? 
+                      `https://bookcart.azurewebsites.net/Upload/Default_image.jpg` 
+                      :
+                      `https://covers.openlibrary.org/b/id/${bookDetails["covers"][0]}-M.jpg`
+                    }
+                  />
+                </Route>
+              )
+            })}
+            {authorS.docs?.map((author, index)=>{
+              return (
+                <Route key={index} exact path={`/author/${author.key}`}>
+                  <AuthorDetails
+                    author = {author}
+                    authorDetails={authorDetails}
+                    works = {works}
+                    handleAuthorBooks={handleAuthorBooks}
+                    cover = {
+                      typeof authorDetails["photos"] === "undefined" 
+                      ? 
+                      `https://openlibrary.org/images/icons/avatar_author-lg.png` 
+                      :
+                      `https://covers.openlibrary.org/a/id/${authorDetails["photos"][0]}-M.jpg`
+                    }
+                  />
+                </Route>
+              )
+            })}
+            {authorBook ? (<div>
+              {works.entries?.map((work, index) => {
+              return(
+                <Route key={index} exact path={`/author${work.key}`}>
+                  <AuthorWorks
+                    book = {work}
+                    bookS = {authorBook?.docs[0]}
+                    cover = {
+                      typeof work["covers"] === "undefined" 
+                      ? 
+                      `https://bookcart.azurewebsites.net/Upload/Default_image.jpg` 
+                      :
+                      `https://covers.openlibrary.org/b/id/${work["covers"][0]}-M.jpg`
+                    }
+                  />
+                </Route>
+              )
+            })}
+            </div>):(<div>Loading...</div>)}
           </Switch>
       </ThemeContextProvider>
     </div>

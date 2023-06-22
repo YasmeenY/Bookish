@@ -1,0 +1,73 @@
+.container{
+    display: flex;
+}
+.photo{
+    height: 119px;
+    width: 180px;
+}
+.image-container{
+	box-shadow: 0 10px 20px #934799;
+	border-radius: 10px;
+	margin-bottom: 30px;
+	margin-top: 25px;
+	padding: 5px;
+}
+
+.detail-container{
+    box-shadow: 0 10px 20px #934799;
+	border-radius: 10px;
+	margin-bottom: 30px;
+	margin-top: 25px;
+	padding: 5px;
+}
+
+.bio{
+    box-shadow: 0 10px 20px #934799;
+	border-radius: 10px;
+	margin-bottom: 30px;
+	margin-top: 25px;
+	padding: 10px;
+}
+
+.works-container{
+    box-shadow: 0 10px 20px #934799;
+	border-radius: 10px;
+	margin-bottom: 30px;
+	margin-top: 25px;
+	padding: 5px;
+}
+
+.left-div{
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    height: fit-content;
+    justify-content: center;
+    box-sizing: border-box;
+    text-align: center;
+    display: block;
+    gap: 20px;
+	box-shadow: 0 10px 20px #934799;
+    padding: 20px;
+    margin: 10px;
+}
+
+.right-div{
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    height: fit-content;
+    justify-content: center;
+    box-sizing: border-box;
+    text-align: center;
+    display: block;
+    gap: 20px;
+	box-shadow: 0 10px 20px #934799;
+    padding: 20px;
+    margin: 10px;
+}
+
+.buttons{
+    border: none;
+    background: none;
+}
