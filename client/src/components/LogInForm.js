@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 import httpClient from "./httpClient";
+import Button from '@mui/material-next/Button';
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import Person4Icon from '@mui/icons-material/Person4';
+import PasswordIcon from '@mui/icons-material/Password';
 
 function LogInForm() {
     const [password, setPassword] = useState("")
@@ -27,34 +32,62 @@ function LogInForm() {
     }
 
     return (
-        <div className="form">
-            <form action="#" className="sign-in-form">
+        <div className="container">
+            <form action="#">
                 <h2 className="title">Sign in</h2>
                 <div className="input-field">
-                    <i className="fas fa-user"></i>
-                    <input
-                        type="text"
+                    <TextField
                         placeholder="Username"
+                        className="input-field"
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={(e) => setUsername(e.target.value)} 
+                        id="username"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <Person4Icon />
+                                </InputAdornment>
+                            ),
+                        }}
+                        variant="standard"
                     />
                 </div>
                 <div className="input-field">
-                    <i className="fas fa-lock"></i>
-                    <input
+                    <TextField
                         type="password"
                         placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        id="Password"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <PasswordIcon />
+                                </InputAdornment>
+                            ),
+                        }}
+                        variant="standard"
                     />
                 </div>
-                <button
+                <button 
+                    className="buttons" 
+                    onClick={ () => LogIn() }
+                >
+                    <Button
+                        size="medium"
+                        variant="filledTonal"
+                        sx={{ m: 1 }}
+                    >
+                        Log In
+                    </Button>
+                </button>
+                {/* <button
                 type="button"
                 onClick={ () => LogIn() }
                 className="button solid"
                 >
                     Log In
-                </button>
+                </button> */}
             </form>
         </div>
     )}

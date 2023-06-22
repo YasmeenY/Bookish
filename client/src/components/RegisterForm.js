@@ -1,5 +1,12 @@
 import React, { useState } from "react";
 import httpClient from "./httpClient";
+import Button from '@mui/material-next/Button';
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import Person4Icon from '@mui/icons-material/Person4';
+import EmailIcon from '@mui/icons-material/Email';
+import PasswordIcon from '@mui/icons-material/Password';
+import "./forms.css";
 
 function RegisterForm() {
     const [email, setEmail] = useState("")
@@ -22,42 +29,71 @@ function RegisterForm() {
         }
     }
     return (
-        <div className="Sign">
-            <form action="#" className="sign-up-form">
+        <div className="container">
+            <form action="#">
                 <h2 className="title">Sign up</h2>
                 <div className="input-field">
-                    <i className="fas fa-user"></i>
-                    <input
-                        type="text"
+                    <TextField
                         placeholder="Username"
+                        className="input-field"
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={(e) => setUsername(e.target.value)} 
+                        id="add-username"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <Person4Icon />
+                                </InputAdornment>
+                            ),
+                        }}
+                        variant="standard"
                     />
                 </div>
                 <div className="input-field">
-                    <i className="fas fa-envelope"></i>
-                    <input
+                    <TextField
                         type="email"
                         placeholder="Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        id="add-email"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <EmailIcon />
+                                </InputAdornment>
+                            ),
+                        }}
+                        variant="standard"
                     />
                 </div>
                 <div className="input-field">
-                    <i className="fas fa-lock"></i>
-                    <input
+                    <TextField
                         type="password"
                         placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        id="add-password"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <PasswordIcon />
+                                </InputAdornment>
+                            ),
+                        }}
+                        variant="standard"
                     />
                 </div>
-                <button
-                    type="button"
-                    className="button"
+                <button 
+                    className="buttons" 
                     onClick={() => Register()}
                 >
-                    Sign Up
+                    <Button
+                        size="medium"
+                        variant="filledTonal"
+                        sx={{ m: 1 }}
+                    >
+                        Sign Up
+                    </Button>
                 </button>
             </form>
         </div>

@@ -5,26 +5,66 @@ from faker import Faker
 from app import app
 from models import db, User, Book, BookInList, List
 
+titles = open("./data/Titles.txt", "r")
+cover = open("./data/cover.txt", "r")
+authors = open("./data/author.txt", "r")
+isbn = open("./data/ISBN.txt", "r")
+ratings = open("./data/Ratings.txt", "r")
+count = open("./data/rating_count.txt", "r")
+description = open("./data/description.txt", "r")
+dates = open("./data/publish_date.txt", "r")
+
 if __name__ == '__main__':
 
     with app.app_context():
+        AUTHOR_NAMES = []
+        COVERS = []
+        RATINGS = []
+        TITLES = []
+        ISBN = []
+        COUNT = []
+        DESCRIPTION = []
+        DATE = []
+
+        for author in authors:
+            AUTHOR_NAMES.append(author.replace("\n",""))
+        for image in cover:
+            COVERS.append(image.replace("\n",""))
+        for rate in ratings:
+            RATINGS.append(rate.replace("\n",""))
+        for name in titles:
+            TITLES.append(name.replace("\n",""))
+        for num in isbn:
+            ISBN.append(num.replace("\n",""))
+        for n in count:
+            COUNT.append(n.replace("\n",""))
+        for words in description:
+            DESCRIPTION.append(words.replace("\n",""))
+        for date in dates:
+            DATE.append(date.replace("\n",""))
+
         print("Clearing db...")
-        User.query.delete()
         Book.query.delete()
         BookInList.query.delete()
         List.query.delete()
 
         print("Seeding Books...")
         books = []
-        b1 = Book(title = "hello")
-        b2 = Book(title = "may")
-        b3 = Book(title = "day")
-        books.append(b1)
-        books.append(b2)
-        books.append(b3)
+        for i in range(99):
+            book = Book(
+                title = TITLES[i],
+                description = DESCRIPTION[i],
+                language = "eng",
+                isbn = ISBN[i],
+                publish_date = DATE[i],
+                rating = RATINGS[i],
+                rating_count = COUNT[i],
+                cover = COVERS[i],
+                author = AUTHOR_NAMES[i],
+            )
+            books.append(book)
         db.session.add_all(books)
         db.session.commit()
-        
 
         print("Seeding BookInList...")
         books_in_list = []
