@@ -54,6 +54,11 @@ function AuthorWorks({book, cover, bookS}){
                             <div>Ratings Count: {count}</div>
                         </div>
                     </div>
+                        <div className="detail-container">
+                        <strong>Book Links: </strong>
+                        <br></br>
+                        <a className='link' href={`https://en.wikipedia.org/wiki/${title}`} target="_blank" rel="noopener noreferrer">Wikipedia</a>
+                </div>
                 </div>
                 <div className='right-div'>
                     <div className="detail-container">

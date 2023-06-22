@@ -11,6 +11,7 @@ import Search from "./Search";
 import BookDetails from './BookDetails';
 import AuthorDetails from './AuthorDetails';
 import AuthorWorks from './AuthorWorks';
+import BookList from './BookLists';
 
 function App() {
   const [user, setUser] = useState("")
@@ -99,7 +100,6 @@ function App() {
       }) ()
   }, [user])
 
-
   return (
     <div className="App">
       <ThemeContextProvider>
@@ -116,6 +116,9 @@ function App() {
                 setUserData = {setUser}
                 user = {user}
               />
+            </Route>
+            <Route exact path="/Books">
+              <BookList/>
             </Route>
             <Route exact path="/Search">
               <Search
@@ -185,7 +188,7 @@ function App() {
                 </Route>
               )
             })}
-            </div>):(<div>Loading...</div>)}
+            </div>):(<div></div>)}
           </Switch>
       </ThemeContextProvider>
     </div>

@@ -1,13 +1,10 @@
 http://books.google.com/books/content?id=9jA0BgAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
-
 http://books.google.com/books/content?id=ljWL5A7D2JAC&printsec=frontcover&img=1&zoom=1&source=gbs_api
-
 http://books.google.com/books/content?id=IZN5BgAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=ZTE0BgAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=S35cUR-u4y4C&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=OIJ5BgAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=QzI0BgAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
-
 http://books.google.com/books/content?id=1cEsNsWYbK4C&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=pTr44Sx6oWQC&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=hPbKKnD7qosC&printsec=frontcover&img=1&zoom=1&source=gbs_api
@@ -18,7 +15,6 @@ http://books.google.com/books/content?id=pylJbfNIwoIC&printsec=frontcover&img=1&
 http://books.google.com/books/content?id=M8xNxgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=-iU5Aq3WuGgC&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=dBKCQgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
-
 http://books.google.com/books/content?id=vGZSso_uyWsC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
 http://books.google.com/books/content?id=4QXnYRaBUFAC&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=tVt-uQAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
@@ -26,7 +22,6 @@ http://books.google.com/books/content?id=ISFr-QqgHUYC&printsec=frontcover&img=1&
 http://books.google.com/books/content?id=6W24a29p9GQC&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=V8kznwEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=oGNbnTQdiJ4C&printsec=frontcover&img=1&zoom=1&source=gbs_api
-
 http://books.google.com/books/content?id=jgnS-R9qNU8C&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=kIcZKBNaQtIC&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=-SalMNeuN5sC&printsec=frontcover&img=1&zoom=1&source=gbs_api
@@ -80,7 +75,6 @@ http://books.google.com/books/content?id=pNyk1XwS9rwC&printsec=frontcover&img=1&
 http://books.google.com/books/content?id=QheiKTNdrQoC&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=TecPMQAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=Z6uePwAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
-
 http://books.google.com/books/content?id=zQJSrGnJwCcC&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=kJtLVMg9_XQC&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=TBJHPgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
@@ -92,8 +86,15 @@ http://books.google.com/books/content?id=lLYOrikgtJoC&printsec=frontcover&img=1&
 http://books.google.com/books/content?id=Ann5ugJilcMC&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=f4zGDgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
 http://books.google.com/books/content?id=VN-JDQAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
-
 http://books.google.com/books/content?id=j6L-qusnoTUC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
 http://books.google.com/books/content?id=tpQxolGFYSkC&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=6dP7ngEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=BrzEQgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
+http://books.google.com/books/content?id=bxLbZ2kGddIC&printsec=frontcover&img=1&zoom=1&source=gbs_api
+http://books.google.com/books/content?id=BU6Kl4mi4DgC&printsec=frontcover&img=1&zoom=1&source=gbs_api
+http://books.google.com/books/content?id=BJqwAK8On4cC&printsec=frontcover&img=1&zoom=1&source=gbs_api
+http://books.google.com/books/content?id=lWIsDAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
+http://books.google.com/books/content?id=78jqOFNt1ocC&printsec=frontcover&img=1&zoom=1&source=gbs_api
+http://books.google.com/books/content?id=s642sbWvLNgC&printsec=frontcover&img=1&zoom=1&source=gbs_api
+http://books.google.com/books/content?id=Ek_-lNfzGUcC&printsec=frontcover&img=1&zoom=1&source=gbs_api
+http://books.google.com/books/content?id=d999Z2KbZJYC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api

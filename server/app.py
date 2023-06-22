@@ -2,7 +2,7 @@ from flask import make_response, jsonify, request, session
 
 # Local imports
 from config import app, db, api, Resource, bcrypt
-from models import db, User, List, BookInList
+from models import db, User, List, BookInList, Book
 
 
 @app.route("/")
@@ -107,6 +107,20 @@ def book_in_list_to_dict( bl ):
         "book_id": bl.book_id,
         "list_id": bl.list_id
     }
+def book_to_dict( book ):
+    return {
+        "id": book.id,
+        "title": book.title,
+        "description": book.description,
+        "language": book.language,
+        "isbn": book.isbn,
+        "publish_date": book.publish_date,
+        "rating": book.rating,
+        "author": book.author,
+        "cover": book.cover,
+        "subjects": book.subjects,
+        "rating_count": book.rating_count
+    }
 
 @app.route("/users", methods=["GET"])
 def users():
@@ -195,6 +209,19 @@ def Books_in_List_by_id(id):
         book = BookInList.query.filter_by( id = id ).first()
         db.session.delete( book )
         db.session.commit()
+        return "", 204
+@app.route( '/books', methods=[ "GET" ])
+def Books():
+    if request.method == "GET":
+        books = [book_to_dict( book ) for book in Book.query.all()]
+        return make_response( jsonify( books ), 200)
+@app.route( '/books/<int:id>', methods=[ "GET" ])
+def Books_by_id(id):
+    book = Book.query.filter( Book.id == id ).first()
+    if book:
+        if request.method == "GET":
+            book_dict = book_to_dict(book)
+            return make_response( jsonify( book_dict ), 200 )
         return "", 204
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

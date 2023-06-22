@@ -36,6 +36,7 @@ class Book( db.Model, SerializerMixin ):
     rating_count = db.Column( db.Integer )
     author = db.Column( db.String )
     cover = db.Column( db.String, default="https://islandpress.org/sites/default/files/default_book_cover_2015.jpg" )
+    subjects = db.Column( db.String )
 
     book_authors = db.relationship( "BookAuthor", backref = "book")
     authors = association_proxy("book-authors", "author")

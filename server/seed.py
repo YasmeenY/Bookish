@@ -13,6 +13,7 @@ ratings = open("./data/Ratings.txt", "r")
 count = open("./data/rating_count.txt", "r")
 description = open("./data/description.txt", "r")
 dates = open("./data/publish_date.txt", "r")
+subjects = open("./data/subjects.txt", "r")
 
 if __name__ == '__main__':
 
@@ -25,6 +26,7 @@ if __name__ == '__main__':
         COUNT = []
         DESCRIPTION = []
         DATE = []
+        SUBJECTS = []
 
         for author in authors:
             AUTHOR_NAMES.append(author.replace("\n",""))
@@ -42,6 +44,8 @@ if __name__ == '__main__':
             DESCRIPTION.append(words.replace("\n",""))
         for date in dates:
             DATE.append(date.replace("\n",""))
+        for subject in subjects:
+            SUBJECTS.append(subject.replace("\n",""))
 
         print("Clearing db...")
         Book.query.delete()
@@ -50,7 +54,7 @@ if __name__ == '__main__':
 
         print("Seeding Books...")
         books = []
-        for i in range(99):
+        for i in range(100):
             book = Book(
                 title = TITLES[i],
                 description = DESCRIPTION[i],
@@ -61,6 +65,7 @@ if __name__ == '__main__':
                 rating_count = COUNT[i],
                 cover = COVERS[i],
                 author = AUTHOR_NAMES[i],
+                subjects = SUBJECTS[i]
             )
             books.append(book)
         db.session.add_all(books)
