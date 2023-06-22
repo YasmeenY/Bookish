@@ -1,5 +1,5 @@
 import React from "react";
-import "./Author.css"
+import "./Details.css"
 import { useHistory } from "react-router-dom";
 import Button from '@mui/material-next/Button';
 import BookIcon from '@mui/icons-material/Book';
@@ -14,11 +14,6 @@ function AuthorDetails({authorDetails, author, cover, works, handleAuthorBooks})
         const subject_formatter = new Intl.ListFormat('en', { style: 'short', type: 'conjunction' });
         const subjects = subject_formatter.format(top_subjects)
 
-        function handleClick(){
-            alert("Clicked")
-            console.log("clicked")
-        }
-
         return(
             <div className="container">
                 <div className="left-div">
@@ -27,24 +22,26 @@ function AuthorDetails({authorDetails, author, cover, works, handleAuthorBooks})
                     </div>
                     <div className="detail-container">
                         <h2>{name}</h2>
-                        <p>Birth Date:</p>
+                        <strong>Birth Date:</strong>
                         <p>{birth_date}</p>
-                        <p>Death Date:</p>
+                        <strong>Death Date:</strong>
                         <p>{death_date}</p>
                     </div>
                 </div>
                 <div className="right-div">
-                    <div className="bio">
-                        {bio}
+                    <div className="detail-container">
+                        <div className="description">
+                            {bio}
+                        </div>
                     </div>
                     <div className="detail-container">
-                        <p>Top Subjects: </p>
+                        <strong>Top Subjects: </strong>
                         <p>{subjects}</p>
-                        <p>Top Works: </p>
+                        <strong>Top Works: </strong>
                         <p>{top_work}</p>
                     </div>
                     <div className="works-container">
-                        <h3>Works:</h3>
+                        <strong>Works:</strong>
                         <div>
                             {works?.map((work, index)=>{
                                 return(
@@ -56,7 +53,6 @@ function AuthorDetails({authorDetails, author, cover, works, handleAuthorBooks})
                                             history.push(`/author${work.key}`);}}
                                     >
                                         <Button
-                                            type="button"
                                             startIcon={<BookIcon />}
                                             size="medium"
                                             variant="filledTonal"

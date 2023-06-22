@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import Rating from '@mui/material/Rating';
+import "./Details.css"
 
 function AuthorWorks({book, cover, bookS}){
     const [edition, setEdition] = useState("")
@@ -28,8 +29,6 @@ function AuthorWorks({book, cover, bookS}){
 
     const {publishers, isbn_13} = edition
 
-    console.log(book)
-
     const author_formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
     const authors = author_formatter.format(author_name)
 
@@ -41,28 +40,38 @@ function AuthorWorks({book, cover, bookS}){
 
     if(rating){
         return(
-            <div>
-                <div>
-                    <img className='cover' src={cover} alt={title}/>
-                    <h2>{title}</h2>
-                    <h3>by: {authors}</h3>
-                    <Rating defaultValue={average} precision={0.1} readOnly />
-                    <div>
-                        <div>Ratings average: {average}</div>
-                        <div>Ratings Count: {count}</div>
+            <div className="container">
+                <div className="left-div">
+                    <div className="detail-container">
+                        <img className='cover' src={cover} alt={title}/>
+                        <h2>{title}</h2>
+                        <h3>by: {authors}</h3>
+                    </div>
+                    <div className="detail-container">
+                        <Rating defaultValue={average} precision={0.1} readOnly />
+                        <div >
+                            <div>Ratings average: {average}</div>
+                            <div>Ratings Count: {count}</div>
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <p>{description}</p>
-                </div>
-                <div>
-                    <p>Publish Date: {publish_date[0]}</p>
-                    <p>Publisher: {publishers}</p>
-                    <p>Isbn: {isbn_13}</p>
-                    <p>Languages: {languages}</p>
-                </div>
-                <div>
-                    <p>Subjects: {subjects}</p>
+                <div className='right-div'>
+                    <div className="detail-container">
+                        <strong>Description: </strong>
+                        <p>{description}</p>
+                    </div>
+                    <div className="detail-container">
+                        <strong>Publish Date: </strong>
+                        <p>{publish_date[0]}</p>
+                        <strong>Publisher: </strong>
+                        <p>{publishers}</p>
+                        <strong>Isbn: </strong>
+                        <p>{isbn_13}</p>
+                        <strong>Languages: </strong>
+                        <p>{languages}</p>
+                        <strong>Subjects: </strong>
+                        <p>{subjects}</p>
+                    </div>
                 </div>
             </div>
         )

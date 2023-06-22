@@ -31,3 +31,32 @@ code {
   height: 250px;
   width: 250px;
 }
+
+.search-div{
+  background-image: url("https://assets.weforum.org/article/image/responsive_big_webp_hySrQhk9QgN45B-0z8PR0bd8ZRyDZ9LnvzPSGaIb91Q.webp");
+  height: 400px;
+  width: 100%;
+}
+
+.search{
+  top: 25%;
+  left: 43%;
+  position: absolute;
+}
+
+.input-field{
+  background-color: aliceblue;
+  border-radius: 10px;
+}
+
+.book-box{
+  width: 17%;
+  border-radius: 10px;
+  box-shadow: 10px 10px 20px 10px #282c34;
+  margin: 10px;
+}
+.search-results{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}

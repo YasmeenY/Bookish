@@ -2,13 +2,14 @@ import React from "react";
 
 function AuthorsBySearch({authorS, history, handleAuthorDetails, handleWorks}){
     let authors = authorS.docs
+
     if(authorS){
         return(
-            <div>
+            <div className="search-results">
                 {
                     authors?.map((author, index) => {
                         return(
-                            <div onClick={()=>{
+                            <div className="book-box" onClick={()=>{
                                 history.push(`/author/${author.key}`)
                                 handleAuthorDetails(author.key)
                                 handleWorks(author.key)

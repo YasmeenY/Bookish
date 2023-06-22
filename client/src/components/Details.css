@@ -1,10 +1,19 @@
 .container{
     display: flex;
+    padding: 10px;
 }
 .photo{
     height: 119px;
     width: 180px;
 }
+
+.cover{
+    width: 180px;
+    height: 280px;
+    margin-top: 10px;
+    padding: 10px;
+}
+
 .image-container{
 	box-shadow: 0 10px 20px #934799;
 	border-radius: 10px;
@@ -18,7 +27,7 @@
 	border-radius: 10px;
 	margin-bottom: 30px;
 	margin-top: 25px;
-	padding: 5px;
+    padding: 10px;
 }
 
 .bio{
@@ -67,7 +76,20 @@
     margin: 10px;
 }
 
+.description{
+    white-space: pre-wrap;
+}
+
 .buttons{
     border: none;
     background: none;
+}
+
+.link {
+    color: black;
+    text-decoration: none;
+}
+
+.link:hover {
+    color: #b8a2e6;
 }

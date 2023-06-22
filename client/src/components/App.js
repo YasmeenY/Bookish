@@ -77,8 +77,13 @@ function App() {
 
   useEffect(() => {
     (async () => {
+      try{
         const response = await httpClient.get("//localhost:5555/check_session")
         setUser(response.data)
+      }
+      catch(error){
+        console.log("Not Authenticated")
+      }
       }) ()
   }, [])
 
@@ -123,7 +128,6 @@ function App() {
                 handleAuthorSearch = {handleAuthorSearch}
                 authorS = {authorS}
                 handleAuthorDetails = {handleAuthorDetails}
-                authorDetails = {authorDetails}
                 handleWorks = {handleWorks}
               />
             </Route>

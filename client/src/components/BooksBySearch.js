@@ -1,13 +1,15 @@
 import React from "react";
 import BookBox from "./BookBox";
+import "./App.css";
 
 function BooksBySearch({bookS, handleBookDetails, linkSetter, history}){
     if(bookS){
         return (
-            <div>
+            <div className="search-results">
                 {bookS.docs?.map((book, index) => {
                     return (
                         <div
+                            className="book-box"
                             key = {index}
                             onClick={() => {
                                 handleBookDetails(book)
