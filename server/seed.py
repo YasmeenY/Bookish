@@ -75,7 +75,7 @@ if __name__ == '__main__':
         books_in_list = []
         bl1 = BookInList(book_id = 1, list_id = 1, user_id = 1)
         bl2 = BookInList(book_id = 1, list_id = 2, user_id = 1)
-        bl3 = BookInList(book_id = 1, list_id = 1, user_id = 1)
+        bl3 = BookInList(book_id = 5, list_id = 1, user_id = 1)
         bl4 = BookInList(book_id = 3, list_id = 2, user_id = 1)
         books_in_list.append(bl1)
         books_in_list.append(bl2)
@@ -88,8 +88,12 @@ if __name__ == '__main__':
         lists = []
         l1 = List(name = "list1", user_id = 1)
         l2 = List(name = "list2", user_id = 1)
+        l3 = List(name = "list3", user_id = 2)
+        l4 = List(name = "list4", user_id = 2)
         lists.append(l1)
         lists.append(l2)
+        lists.append(l3)
+        lists.append(l4)
         db.session.add_all(lists)
         db.session.commit()
 

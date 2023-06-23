@@ -12,7 +12,7 @@ function Sign() {
                 <div>
                     <RegisterForm/>
                     <h3>Already a user ?</h3>
-                    <button 
+                    <div 
                         className="buttons" 
                         onClick={ () => setRegister( false ) }
                     >
@@ -23,13 +23,13 @@ function Sign() {
                         >
                             Log In
                         </Button>
-                    </button>
+                    </div>
                 </div>
             ): (
                 <div>
                     <LogInForm/>
                     <h3>New user ?</h3>
-                    <button 
+                    <div 
                         className="buttons" 
                         onClick={ () => setRegister( true ) }
                     >
@@ -40,7 +40,7 @@ function Sign() {
                         >
                             Register
                         </Button>
-                    </button>
+                    </div>
                 </div>
             )
             }

@@ -39,7 +39,7 @@ function Search({SearchSetter, handleSearch, bookS, search, linkSetter, handleBo
                                 />
                             </div>
                             <br></br>
-                            <button
+                            <div
                                 className="buttons"
                                 onClick={() => {
                                     handleChange(false)
@@ -51,9 +51,9 @@ function Search({SearchSetter, handleSearch, bookS, search, linkSetter, handleBo
                                     variant="filledTonal"
                                     sx={{ m: 1 }}
                                 > {"Search By Book Title"} </Button>
-                            </button>
+                            </div>
                             <br></br>
-                            <button
+                            <div
                                 className="buttons"
                                 onClick={() => {
                                     handleChange(true)
@@ -65,7 +65,7 @@ function Search({SearchSetter, handleSearch, bookS, search, linkSetter, handleBo
                                     variant="filledTonal"
                                     sx={{ m: 1 }}
                                 > {"Search By Author Name"} </Button>
-                            </button>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -3,6 +3,7 @@ from flask import make_response, jsonify, request, session
 # Local imports
 from config import app, db, api, Resource, bcrypt
 from models import db, User, List, BookInList, Book
+from sqlalchemy import func
 
 
 @app.route("/")
@@ -100,6 +101,7 @@ def list_to_dict( list ):
     return {
         "id": list.id,
         "name": list.name,
+        "user_id": list.user_id
     }
 def book_in_list_to_dict( bl ):
     return {
@@ -160,6 +162,12 @@ def users_by_id(id):
             return make_response( jsonify( user_dict ), 200 )
     else:
         return make_response( "User not found.", 404 )
+    
+@app.route("/users/lists", methods=["GET"])
+def lists():
+    if request.method == "GET":
+        lists = [list_to_dict( list ) for list in List.query.all()]
+        return make_response( jsonify( lists ), 200)
 
 @app.route( '/users/lists/<int:id>', methods=[ "GET", "DELETE", "PATCH" ])
 def lists_by_id(id):
@@ -168,6 +176,8 @@ def lists_by_id(id):
         if request.method == "GET":
             list_dict = list_to_dict(list)
             list_dict["books"]= [book_in_list_to_dict(r) for r in BookInList.query.filter(BookInList.list_id == id).all()]
+            for i in range(len(list_dict["books"])):
+                list_dict["books"][i]["book"] = [book_to_dict(r) for r in Book.query.filter(BookInList.book_id == Book.id).all()]
             return make_response( jsonify( list_dict ), 200 )
         
         elif request.method == "DELETE":
@@ -188,6 +198,7 @@ def lists_by_id(id):
             return make_response( jsonify( list_dict ), 200 )
     else:
         return make_response( "List not found.", 404 )
+
 @app.route( '/booksInLists', methods=[ "POST" ])
 def Books_in_List():
     if request.method == "POST":
@@ -203,6 +214,7 @@ def Books_in_List():
         db.session.add( new_book_in_list )
         db.session.commit()
         return make_response( jsonify( book_in_list_to_dict( new_book_in_list ) ), 201 )
+
 @app.route( '/booksInLists/<int:id>', methods=[ "DELETE" ])
 def Books_in_List_by_id(id):
     if request.method == "DELETE":
@@ -215,6 +227,7 @@ def Books():
     if request.method == "GET":
         books = [book_to_dict( book ) for book in Book.query.all()]
         return make_response( jsonify( books ), 200)
+
 @app.route( '/books/<int:id>', methods=[ "GET" ])
 def Books_by_id(id):
     book = Book.query.filter( Book.id == id ).first()
@@ -223,5 +236,11 @@ def Books_by_id(id):
             book_dict = book_to_dict(book)
             return make_response( jsonify( book_dict ), 200 )
         return "", 204
+
+@app.route( '/books/random', methods=[ "GET" ])
+def random_books():
+    if request.method == "GET":
+        books = [book_to_dict( book ) for book in Book.query.order_by(func.random()).limit(10).all()]
+        return make_response( jsonify( books ), 200)
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

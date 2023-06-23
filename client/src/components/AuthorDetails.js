@@ -45,7 +45,7 @@ function AuthorDetails({authorDetails, author, cover, works, handleAuthorBooks})
                         <div>
                             {works?.map((work, index)=>{
                                 return(
-                                    <button
+                                    <div
                                         className="buttons"
                                         key = {index}
                                         onClick={() => {
@@ -58,7 +58,7 @@ function AuthorDetails({authorDetails, author, cover, works, handleAuthorBooks})
                                             variant="filledTonal"
                                             sx={{ m: 1 }}
                                         > {work.title} </Button>
-                                    </button>
+                                    </div>
                                 )
                             })}
                         </div>

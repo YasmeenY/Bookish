@@ -69,7 +69,7 @@ function LogInForm() {
                         variant="standard"
                     />
                 </div>
-                <button 
+                <div 
                     className="buttons" 
                     onClick={ () => LogIn() }
                 >
@@ -80,14 +80,7 @@ function LogInForm() {
                     >
                         Log In
                     </Button>
-                </button>
-                {/* <button
-                type="button"
-                onClick={ () => LogIn() }
-                className="button solid"
-                >
-                    Log In
-                </button> */}
+                </div>
             </form>
         </div>
     )}

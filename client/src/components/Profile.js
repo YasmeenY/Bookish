@@ -34,6 +34,7 @@ function Profile({data}) {
         window.location.href = "/"
     }
 
+
     return (
         <div className="container">
             <div className="left-div">
@@ -60,7 +61,7 @@ function Profile({data}) {
                             </div>
                             <br></br>
                             <br></br>
-                            <button 
+                            <div 
                                 className="buttons" 
                                 onClick={ () => {
                                     setChange(!change)
@@ -74,10 +75,10 @@ function Profile({data}) {
                                 >
                                     Change Image
                                 </Button>
-                            </button>
+                            </div>
                         </div>
                     ): (
-                        <button 
+                        <div 
                             className="buttons" 
                             onClick={ () => {
                                 setChange(!change)
@@ -90,12 +91,12 @@ function Profile({data}) {
                             >
                                 Change Image
                             </Button>
-                        </button>
+                        </div>
                     )
                 }
                 <h2>{data.username}</h2>
                 <h2>{data.email}</h2>
-                <button 
+                <div 
                     className="buttons" 
                     onClick={ () => logOutUser() }
                 >
@@ -106,8 +107,8 @@ function Profile({data}) {
                     >
                         Log Out
                     </Button>
-                </button>
-                <button 
+                </div>
+                <div 
                     className="buttons" 
                     onClick={ () => deleteUser() }
                 >
@@ -118,7 +119,7 @@ function Profile({data}) {
                     >
                         Delete User
                     </Button>
-                </button>
+                </div>
             </div>
             <div className="left-div">
                 This is the container for the lists

@@ -83,6 +83,15 @@
 .buttons{
     border: none;
     background: none;
+    block-size: fit-content;
+}
+
+.more-button{
+    border: none;
+    background: none;
+    position:absolute;
+    top: 9%;
+    right:5%;
 }
 
 .link {

@@ -73,6 +73,7 @@ class BookInList( db.Model, SerializerMixin ):
     book_id = db.Column( db.Integer, db.ForeignKey( 'books.id' ) )
     list_id = db.Column( db.Integer, db.ForeignKey( 'lists.id' ) )
     user_id = db.Column( db.Integer, db.ForeignKey( 'users.id' ) )
+    book = db.relationship("Book", backref= "books-in-lists")
 
 class BookAuthor( db.Model, SerializerMixin ):
     __tablename__ = 'book-authors'

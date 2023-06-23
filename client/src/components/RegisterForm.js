@@ -83,7 +83,7 @@ function RegisterForm() {
                         variant="standard"
                     />
                 </div>
-                <button 
+                <div 
                     className="buttons" 
                     onClick={() => Register()}
                 >
@@ -94,7 +94,7 @@ function RegisterForm() {
                     >
                         Sign Up
                     </Button>
-                </button>
+                </div>
             </form>
         </div>
     )}
