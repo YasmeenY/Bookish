@@ -54,11 +54,12 @@ if __name__ == '__main__':
 
         print("Seeding Books...")
         books = []
-        for i in range(100):
+        for i in range(99):
             book = Book(
                 title = TITLES[i],
+                key = f"OL{randint(100,9999)}",
                 description = DESCRIPTION[i],
-                language = "eng",
+                language = "eng, ita, dut, spa, rus, ger, jpn, fre, bul, slo, cze, swe, pol, and gag",
                 isbn = ISBN[i],
                 publish_date = DATE[i],
                 rating = RATINGS[i],
@@ -73,10 +74,10 @@ if __name__ == '__main__':
 
         print("Seeding BookInList...")
         books_in_list = []
-        bl1 = BookInList(book_id = 1, list_id = 1, user_id = 1)
-        bl2 = BookInList(book_id = 1, list_id = 2, user_id = 1)
-        bl3 = BookInList(book_id = 5, list_id = 1, user_id = 1)
-        bl4 = BookInList(book_id = 3, list_id = 2, user_id = 1)
+        bl1 = BookInList(book_name = "Harry Potter and the Sorcerer's Stone", book_cover="http://books.google.com/books/content?id=9jA0BgAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", book_id = 1, list_id = 1, user_id = 1)
+        bl2 = BookInList(book_name = "The Alchemist (novel)", book_cover="http://books.google.com/books/content?id=9jA0BgAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", book_id = 9, list_id = 2, user_id = 1)
+        bl3 = BookInList(book_name = "The Fellowship of the Ring", book_id = 5, book_cover="http://books.google.com/books/content?id=S35cUR-u4y4C&printsec=frontcover&img=1&zoom=1&source=gbs_api", list_id = 1, user_id = 1)
+        bl4 = BookInList(book_name = "Harry Potter and the Prisoner of Azkaban", book_cover="http://books.google.com/books/content?id=IZN5BgAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", book_id = 3, list_id = 2, user_id = 1)
         books_in_list.append(bl1)
         books_in_list.append(bl2)
         books_in_list.append(bl3)
@@ -86,10 +87,10 @@ if __name__ == '__main__':
 
         print("Seeding List...")
         lists = []
-        l1 = List(name = "list1", user_id = 1)
-        l2 = List(name = "list2", user_id = 1)
-        l3 = List(name = "list3", user_id = 2)
-        l4 = List(name = "list4", user_id = 2)
+        l1 = List(name = "Favorites", user_id = 1)
+        l2 = List(name = "Dropped", user_id = 1)
+        l3 = List(name = "Want to Read", user_id = 2)
+        l4 = List(name = "Likes", user_id = 2)
         lists.append(l1)
         lists.append(l2)
         lists.append(l3)

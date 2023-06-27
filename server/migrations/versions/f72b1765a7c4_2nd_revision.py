@@ -1,8 +1,8 @@
-"""initial  revision
+"""2nd  revision
 
-Revision ID: c2c5fe540549
+Revision ID: f72b1765a7c4
 Revises: 
-Create Date: 2023-06-15 11:55:54.061175
+Create Date: 2023-06-26 18:35:00.904936
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c2c5fe540549'
+revision = 'f72b1765a7c4'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -29,16 +29,20 @@ def upgrade():
     op.create_table('books',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(), nullable=True),
-    sa.Column('description', sa.String(), nullable=True),
+    sa.Column('key', sa.String(), nullable=True),
+    sa.Column('description', sa.Text(), nullable=True),
     sa.Column('publisher', sa.String(), nullable=True),
     sa.Column('language', sa.String(), nullable=True),
     sa.Column('isbn', sa.String(), nullable=True),
-    sa.Column('excerpts', sa.String(), nullable=True),
-    sa.Column('preview_url', sa.String(), nullable=True),
     sa.Column('publish_date', sa.String(), nullable=True),
-    sa.Column('open_library_id', sa.String(), nullable=True),
+    sa.Column('rating', sa.Integer(), nullable=True),
+    sa.Column('rating_count', sa.Integer(), nullable=True),
+    sa.Column('author', sa.String(), nullable=True),
     sa.Column('cover', sa.String(), nullable=True),
-    sa.PrimaryKeyConstraint('id')
+    sa.Column('subjects', sa.String(), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('key'),
+    sa.UniqueConstraint('title')
     )
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -74,6 +78,8 @@ def upgrade():
     )
     op.create_table('books-in-lists',
     sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('book_name', sa.String(), nullable=True),
+    sa.Column('book_cover', sa.String(), nullable=True),
     sa.Column('book_id', sa.Integer(), nullable=True),
     sa.Column('list_id', sa.Integer(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),

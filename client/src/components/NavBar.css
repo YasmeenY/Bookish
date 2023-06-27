@@ -34,7 +34,14 @@
 
 .active {
     margin: 0 10px;
+}
 
+.user-icon-container{
+    margin: 0 10px;
+}
+
+.user-icon-container img{
+    border-radius: 20px;
 }
 
 .link {

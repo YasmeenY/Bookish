@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 import UserIcon from "../Images/UserIcon.png";
-import "./NavBar.css"
+import "./NavBar.css";
 
 function NavBar({user, data}) {
     return (
@@ -29,13 +29,13 @@ function NavBar({user, data}) {
                         </Link>
                     </div>
                     {user !== "" ? (
-                        <div className="active user-icon-container">
+                        <div className="user-icon-container">
                             <Link to="/profile" className="link">
                                 <img src={data.image} alt="No Logo Available"></img>
                             </Link>
                         </div>
                     ): (
-                        <div className="active user-icon-container">
+                        <div className="user-icon-container">
                             <Link to="/sign" className="link">
                                 <img src={UserIcon} alt="No Logo Available"></img>
                             </Link>

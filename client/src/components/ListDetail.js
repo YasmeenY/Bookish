@@ -1,8 +1,9 @@
 import React from "react";
 import Rating from '@mui/material/Rating';
 import "./Details.css"
+import AddToListButton from "./AddToListButton";
 
-function ListDetails({book}){
+function ListDetails({book, userData}){
     const {author, title, cover, description, subjects, rating, rating_count, language, isbn, publish_date} = book
 
     return(
@@ -17,6 +18,12 @@ function ListDetails({book}){
                     <Rating defaultValue={rating} precision={0.5} readOnly />
                     <div>Ratings average: {rating}</div>
                     <div>Ratings Count: {rating_count}</div>
+                </div>
+                <div className="detail-container">
+                    <AddToListButton
+                        userData = {userData}
+                        book = {book.key}
+                    />
                 </div>
                 <div className="detail-container">
                     <strong>Book Links: </strong>

@@ -14,6 +14,8 @@ function AuthorDetails({authorDetails, author, cover, works, handleAuthorBooks})
         const subject_formatter = new Intl.ListFormat('en', { style: 'short', type: 'conjunction' });
         const subjects = subject_formatter.format(top_subjects)
 
+        console.log(authorDetails)
+
         return(
             <div className="container">
                 <div className="left-div">
@@ -31,7 +33,7 @@ function AuthorDetails({authorDetails, author, cover, works, handleAuthorBooks})
                 <div className="right-div">
                     <div className="detail-container">
                         <div className="description">
-                            {bio}
+                            {typeof bio !== "object" ? (<p className='description'>{bio}</p>):(<p>{bio.value}</p>)}
                         </div>
                     </div>
                     <div className="detail-container">

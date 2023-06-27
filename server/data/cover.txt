@@ -40,7 +40,6 @@ http://books.google.com/books/content?id=2mgnEzzaJrIC&printsec=frontcover&img=1&
 http://books.google.com/books/content?id=pgPWOaOctq8C&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=5zGGPwAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=VTolm6HG2EgC&printsec=frontcover&img=1&zoom=1&source=gbs_api
-http://books.google.com/books/content?id=jECp6elJjE4C&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=HdTZAAAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=twDVs4UIU_kC&printsec=frontcover&img=1&zoom=1&source=gbs_api
 http://books.google.com/books/content?id=HByVN01euAAC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api

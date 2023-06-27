@@ -26,6 +26,7 @@ function App() {
   const [works, setWorks] = useState("")
   const [authorBook, setAuthorBook] = useState("")
   const [lists, setList] = useState("")
+  const [bookInList, setBookInList] = useState("")
 
   function handleBookDetails(book){
     fetch(`https://openlibrary.org${book.key}.json`)
@@ -102,11 +103,30 @@ function App() {
       }) ()
   }, [user])
 
-
-
-  // function addBooktoLists(){
-  //   const response = httpClient.get(`//localhost:5555/users/${user.id}`)
-  // }
+  function addBooktoLists(id, key, title, description, publisher, language, isbn, date, rating, count, authors, cover, subject) {
+    (async () => {
+      try {
+        const response = await httpClient.post("http://127.0.0.1:5555/books", {
+          "id": id,
+          "key": key,
+          "title": title,
+          "description": description,
+          "publisher": publisher,
+          "language": language,
+          "isbn": isbn,
+          "publish_date": date,
+          "rating": rating,
+          "rating_count": count,
+          "author": authors,
+          "cover": cover,
+          "subjects": subject
+        })
+        setBookInList(response.data)
+      }
+      catch (error) {
+        console.log("Book Already in Data")
+      }
+  }) (id, key, title, description, publisher, language, isbn, date, rating, count, authors, cover, subject, bookInList)}
 
   useEffect(() => {
     (async () => {
@@ -115,10 +135,13 @@ function App() {
             setList(response.data)
         }
         catch (error) {
-            console.log("Error")
+            if (error.response.status === 500){
+              console.log("Book already in data")
+            }
         }
       }) ()
   }, [])
+
 
   if (lists){
     return (
@@ -148,6 +171,7 @@ function App() {
                       <Route key={index} exact path={`/books/${book.id}`}>
                         <ListDetails
                             book = {book}
+                            userData = {userData}
                         />
                       </Route>
                   )
@@ -171,7 +195,10 @@ function App() {
                   <Route key={index} exact path={link}>
                     <BookDetails
                       book = {book}
+                      userData = {userData}
                       bookDetails={bookDetails}
+                      bookInList = {bookInList}
+                      addBooktoLists = {addBooktoLists}
                       cover = {
                         typeof bookDetails["covers"] === "undefined" 
                         ? 
@@ -207,8 +234,11 @@ function App() {
                 return(
                   <Route key={index} exact path={`/author${work.key}`}>
                     <AuthorWorks
+                      userData = {userData}
                       book = {work}
+                      bookInList = {bookInList}
                       bookS = {authorBook?.docs[0]}
+                      addBooktoLists = {addBooktoLists}
                       cover = {
                         typeof work["covers"] === "undefined" 
                         ? 

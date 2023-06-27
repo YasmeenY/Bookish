@@ -1,10 +1,9 @@
 from sqlalchemy.orm import validates
 from sqlalchemy.ext.associationproxy import association_proxy
 from config import db, bcrypt
-from sqlalchemy_serializer import SerializerMixin
 
 # Models go here:
-class User( db.Model, SerializerMixin ):
+class User( db.Model ):
     __tablename__ = 'users'
     __table_args__ = {'extend_existing': True}
 
@@ -21,29 +20,30 @@ class User( db.Model, SerializerMixin ):
         )
 
 
-class Book( db.Model, SerializerMixin ):
+class Book( db.Model ):
     __tablename__ = 'books'
     __table_args__ = {'extend_existing': True}
 
     id = db.Column( db.Integer, primary_key=True )
-    title = db.Column( db.String )
-    description = db.Column( db.String )
-    publisher = db.Column( db.String )
-    language = db.Column( db.String )
-    isbn = db.Column( db.String )
-    publish_date  = db.Column( db.String )
-    rating = db.Column( db.Integer )
-    rating_count = db.Column( db.Integer )
-    author = db.Column( db.String )
+    title = db.Column( db.String, unique = True  )
+    key = db.Column( db.String, unique = True  )
+    description = db.Column( db.Text, default=None )
+    publisher = db.Column( db.String, default=None )
+    language = db.Column( db.String, default=None )
+    isbn = db.Column( db.String, default=None )
+    publish_date  = db.Column( db.String, default=None )
+    rating = db.Column( db.Integer, default=None )
+    rating_count = db.Column( db.Integer, default=None )
+    author = db.Column( db.String, default=None )
     cover = db.Column( db.String, default="https://islandpress.org/sites/default/files/default_book_cover_2015.jpg" )
-    subjects = db.Column( db.String )
+    subjects = db.Column( db.String, default=None )
 
     book_authors = db.relationship( "BookAuthor", backref = "book")
     authors = association_proxy("book-authors", "author")
     links = db.relationship( "BookLink", backref = "book" )
 
 
-class Author( db.Model, SerializerMixin ):
+class Author( db.Model ):
     __tablename__ = 'authors'
     __table_args__ = {'extend_existing': True}
 
@@ -56,7 +56,7 @@ class Author( db.Model, SerializerMixin ):
     book_authors = db.relationship( "BookAuthor", backref = "author")
     books = association_proxy("book-authors", "book")
 
-class List( db.Model, SerializerMixin ):
+class List( db.Model ):
     __tablename__ = 'lists'
     __table_args__ = {'extend_existing': True}
 
@@ -65,17 +65,18 @@ class List( db.Model, SerializerMixin ):
     user_id = db.Column( db.Integer, db.ForeignKey( 'users.id' ) )
     books = db.relationship( "BookInList", backref = "list")
 
-class BookInList( db.Model, SerializerMixin ):
+class BookInList( db.Model ):
     __tablename__ = 'books-in-lists'
     __table_args__ = {'extend_existing': True}
 
     id = db.Column( db.Integer, primary_key=True )
+    book_name = db.Column( db.String )
+    book_cover = db.Column( db.String )
     book_id = db.Column( db.Integer, db.ForeignKey( 'books.id' ) )
     list_id = db.Column( db.Integer, db.ForeignKey( 'lists.id' ) )
     user_id = db.Column( db.Integer, db.ForeignKey( 'users.id' ) )
-    book = db.relationship("Book", backref= "books-in-lists")
 
-class BookAuthor( db.Model, SerializerMixin ):
+class BookAuthor( db.Model ):
     __tablename__ = 'book-authors'
     __table_args__ = {'extend_existing': True}
 
@@ -83,7 +84,7 @@ class BookAuthor( db.Model, SerializerMixin ):
     book_id = db.Column( db.Integer, db.ForeignKey( 'books.id' ) )
     author_id = db.Column( db.Integer, db.ForeignKey( 'authors.id' ) )
 
-class BookLink(db.Model, SerializerMixin ):
+class BookLink(db.Model ):
     __tablename__ = 'links'
     __table_args__ = {'extend_existing': True}
 

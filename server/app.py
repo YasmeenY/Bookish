@@ -107,12 +107,15 @@ def book_in_list_to_dict( bl ):
     return {
         "id": bl.id,
         "book_id": bl.book_id,
-        "list_id": bl.list_id
+        "list_id": bl.list_id,
+        "name": bl.book_name,
+        "cover": bl.book_cover
     }
 def book_to_dict( book ):
     return {
         "id": book.id,
         "title": book.title,
+        "key": book.key,
         "description": book.description,
         "language": book.language,
         "isbn": book.isbn,
@@ -176,10 +179,8 @@ def lists_by_id(id):
         if request.method == "GET":
             list_dict = list_to_dict(list)
             list_dict["books"]= [book_in_list_to_dict(r) for r in BookInList.query.filter(BookInList.list_id == id).all()]
-            for i in range(len(list_dict["books"])):
-                list_dict["books"][i]["book"] = [book_to_dict(r) for r in Book.query.filter(BookInList.book_id == Book.id).all()]
             return make_response( jsonify( list_dict ), 200 )
-        
+
         elif request.method == "DELETE":
             List.query.filter_by( id = id ).delete()
             BookInList.query.filter_by( list_id = id ).delete()
@@ -205,11 +206,15 @@ def Books_in_List():
         book_id = request.get_json()[ 'book_id' ]
         list_id = request.get_json()[ 'list_id' ]
         user_id = request.get_json()[ 'user_id' ]
+        book_cover = request.get_json()[ 'book_cover' ]
+        book_name = request.get_json()[ 'book_name' ]
 
         new_book_in_list = BookInList(
             book_id = book_id,
             list_id = list_id,
-            user_id = user_id
+            user_id = user_id,
+            book_cover = book_cover,
+            book_name = book_name
         )
         db.session.add( new_book_in_list )
         db.session.commit()
@@ -222,11 +227,30 @@ def Books_in_List_by_id(id):
         db.session.delete( book )
         db.session.commit()
         return "", 204
-@app.route( '/books', methods=[ "GET" ])
+@app.route( '/books', methods=[ "GET", "POST" ])
 def Books():
     if request.method == "GET":
         books = [book_to_dict( book ) for book in Book.query.all()]
         return make_response( jsonify( books ), 200)
+    if request.method == "POST":
+        new_Book = Book(
+            id = request.get_json()[ "id" ],
+            title = request.get_json()[ 'title' ],
+            key = request.get_json()[ 'key' ],
+            description = request.get_json()[ 'description' ],
+            publisher = request.get_json()[ 'publisher' ],
+            language = request.get_json()[ 'language' ],
+            isbn = request.get_json()[ 'isbn' ],
+            publish_date = request.get_json()[ 'publish_date' ],
+            rating = request.get_json()[ 'rating' ],
+            rating_count = request.get_json()[ 'rating_count' ],
+            author = request.get_json()[ 'author' ],
+            cover = request.get_json()[ 'cover' ],
+            subjects = request.get_json()[ 'subjects' ]
+        )
+        db.session.add( new_Book )
+        db.session.commit()
+        return make_response( jsonify( book_to_dict( new_Book ) ), 201)
 
 @app.route( '/books/<int:id>', methods=[ "GET" ])
 def Books_by_id(id):
@@ -242,5 +266,17 @@ def random_books():
     if request.method == "GET":
         books = [book_to_dict( book ) for book in Book.query.order_by(func.random()).limit(10).all()]
         return make_response( jsonify( books ), 200)
+@app.route( '/books/<string:key>', methods=[ "GET" ])
+def get_book_by_key(key):
+    if request.method == "GET":
+        book = Book.query.filter(Book.key == key).first()
+        book_dict = book_to_dict(book)
+        return make_response( jsonify( book_dict ), 200)
+@app.route( '/books/lastId', methods=[ "GET" ])
+def get_last_Id():
+    if request.method == "GET":
+        book = Book.query.order_by(Book.id.desc()).first()
+        id = book.id + 1
+        return make_response( jsonify( id ), 200)
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
