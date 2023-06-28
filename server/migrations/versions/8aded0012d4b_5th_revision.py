@@ -1,8 +1,8 @@
-"""2nd  revision
+"""5th  revision
 
-Revision ID: f72b1765a7c4
+Revision ID: 8aded0012d4b
 Revises: 
-Create Date: 2023-06-26 18:35:00.904936
+Create Date: 2023-06-28 13:00:13.428755
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'f72b1765a7c4'
+revision = '8aded0012d4b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -30,7 +30,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(), nullable=True),
     sa.Column('key', sa.String(), nullable=True),
-    sa.Column('description', sa.Text(), nullable=True),
+    sa.Column('description', sa.String(), nullable=True),
     sa.Column('publisher', sa.String(), nullable=True),
     sa.Column('language', sa.String(), nullable=True),
     sa.Column('isbn', sa.String(), nullable=True),
@@ -41,8 +41,7 @@ def upgrade():
     sa.Column('cover', sa.String(), nullable=True),
     sa.Column('subjects', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('key'),
-    sa.UniqueConstraint('title')
+    sa.UniqueConstraint('key')
     )
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -63,11 +62,12 @@ def upgrade():
     )
     op.create_table('links',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('book_id', sa.Integer(), nullable=True),
+    sa.Column('book_key', sa.Integer(), nullable=True),
     sa.Column('name', sa.String(), nullable=True),
     sa.Column('url', sa.String(), nullable=True),
-    sa.ForeignKeyConstraint(['book_id'], ['books.id'], name=op.f('fk_links_book_id_books')),
-    sa.PrimaryKeyConstraint('id')
+    sa.ForeignKeyConstraint(['book_key'], ['books.key'], name=op.f('fk_links_book_key_books')),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('url')
     )
     op.create_table('lists',
     sa.Column('id', sa.Integer(), nullable=False),

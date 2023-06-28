@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import Rating from '@mui/material/Rating';
 import AddToListButton from "./AddToListButton";
-import "./Details.css"
+import axios from "axios";
+import "./Details.css";
 
 function BookDetails({bookDetails, cover, book, userData, addBooktoLists}) {
     const [edition, setEdition] = useState("")
-    const [bookId, setBookId] = useState(0)
+
     const { description, links, subjects } = bookDetails
-    const { ratings_average, ratings_count, author_name, lending_edition_s, language } = book
+    const { ratings_average, ratings_count, author_name, lending_edition_s, language} = book
 
     useEffect(()=>{
             fetch(`https://openlibrary.org/books/${lending_edition_s}.json`)
@@ -17,15 +18,18 @@ function BookDetails({bookDetails, cover, book, userData, addBooktoLists}) {
             }) 
     }, [lending_edition_s])
 
-    useEffect(()=>{
-        fetch(`http://127.0.0.1:5555/books/lastId`)
-        .then(r=>r.json())
-        .then(data => {
-            setBookId(data)
-        }) 
-    }, [])
 
-    const { isbn_10, publishers, publish_date, title, uris} = edition
+    const { publishers, publish_date, uris, title } = edition
+
+    const isbn_formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
+    let isbn = ""
+
+    if(edition.isbn_13 === undefined){
+        isbn = isbn_formatter.format(edition.isbn_10)
+    }
+    else{
+        isbn = isbn_formatter.format(edition.isbn_13)
+    }
 
     const subject_formatter = new Intl.ListFormat('en', { style: 'short', type: 'conjunction' });
     const subject = subject_formatter.format(subjects)
@@ -39,21 +43,45 @@ function BookDetails({bookDetails, cover, book, userData, addBooktoLists}) {
     const publisher_formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
     const publisher = publisher_formatter.format(publishers)
 
-    const isbn_formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
-    const isbn = isbn_formatter.format(isbn_10)
-
     let result = bookDetails.key?.slice(7)
     
-    const average = Math.round(ratings_average * 100) / 100
+    let average = Math.round(ratings_average * 100) / 100
+
+    let descriptionType = typeof description
+
+    let count = ratings_count
+
+    if(count === undefined){
+        average = 0
+        count = 0
+    }
 
     useEffect(()=>{
-        if(description !== "object"){
-            addBooktoLists(bookId, result, title, description, publisher, languages, isbn, publish_date, average, ratings_count, authors, cover, subject)
+        if(descriptionType === "string"){
+            addBooktoLists( result, title, description, publisher, languages, isbn, publish_date, average, count, authors, cover, subject)
+        }
+        else if(typeof description === "object"){
+            addBooktoLists( result, title, description.value, publisher, languages, isbn, publish_date, average, count, authors, cover, subject)
         }
         else{
-            addBooktoLists(bookId, result, title, description.value, publisher, languages, isbn, publish_date, average, ratings_count, authors, cover, subject)
+            addBooktoLists( result, title, "No Description :(", publisher, languages, isbn, publish_date, average, count, authors, cover, subject)
         }
-    }, [bookId, result, title, description, publishers, languages, isbn, publish_date, average, ratings_count, authors, cover, subject, addBooktoLists])
+    }, [descriptionType, result, title, description, publisher, languages, isbn, publish_date, average, count, authors, cover, subject, addBooktoLists])
+
+    useEffect(()=>{
+        try{
+            links?.map((link)=>{
+                axios.post(`http://localhost:5555/links`, {
+                    "name": link.title,
+                    "url": link.url,
+                    "book_key": result
+                })
+            })
+        }
+        catch(error){
+            console.log("error")
+        }
+    }, [])
 
     if (edition){
         return (
@@ -70,13 +98,16 @@ function BookDetails({bookDetails, cover, book, userData, addBooktoLists}) {
                             <div>Ratings average: {average}</div>
                             <div>Ratings Count: {ratings_count}</div>
                         </div>
-                        <div className="detail-container">
-                            <AddToListButton
-                                userData = {userData}
-                                book = {result}
-
-                            />
-                        </div>
+                        {userData !== "" ? (                  
+                            <div className="detail-container">
+                                <AddToListButton
+                                    userData = {userData}
+                                    book = {result}
+                                />
+                            </div>
+                        ):(
+                        <div></div>
+                        )}
                     </div>
                     <div className='right-div'>
                         <strong>Book Links:</strong>
@@ -85,7 +116,7 @@ function BookDetails({bookDetails, cover, book, userData, addBooktoLists}) {
                                 {
                                     links?.map((link) => {
                                         return(
-                                            <div>
+                                            <div key={link.title}>
                                                 <a className='link' href={link.url} target="_blank" rel="noopener noreferrer">{link.title}</a>
                                             </div>
                                         )
@@ -114,6 +145,8 @@ function BookDetails({bookDetails, cover, book, userData, addBooktoLists}) {
                         <p> {publisher}</p>
                         <strong>ISBN: </strong>
                         <p> {isbn}</p>
+                        <strong>Edition: </strong>
+                        <p> {lending_edition_s}</p>
                         <strong>Languages:</strong>
                         <p>{languages}</p>
                         <strong>Subjects:</strong>

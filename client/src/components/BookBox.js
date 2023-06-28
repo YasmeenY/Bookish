@@ -1,4 +1,5 @@
-function BookBox({cover, title}) {
+
+function BookBox({ cover, title }) {
     return (
         <div className="Sign">
             <img className='cover' src={cover} alt={title}></img>

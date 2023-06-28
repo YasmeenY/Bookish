@@ -11,7 +11,7 @@ function Home() {
     useEffect(() => {
         (async () => {
             try {
-                const response = await httpClient.get("http://127.0.0.1:5555/books/random")
+                const response = await httpClient.get("http://localhost:5555/books/random")
                 setBooks(response.data)
             }
             catch (error) {
@@ -26,7 +26,7 @@ function Home() {
         return (
             <div>
                 <div className="details-container">
-                    <h3>Top Rated Books: </h3>
+                    <h3>Discover Books: </h3>
                     <button 
                         className="more-button" 
                         onClick={() => history.push(`/Books`)}

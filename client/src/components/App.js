@@ -25,7 +25,7 @@ function App() {
   const [authorDetails, setAuthorDetails] = useState("")
   const [works, setWorks] = useState("")
   const [authorBook, setAuthorBook] = useState("")
-  const [lists, setList] = useState("")
+  const [BookLists, setBookList] = useState("")
   const [bookInList, setBookInList] = useState("")
 
   function handleBookDetails(book){
@@ -82,7 +82,7 @@ function App() {
   useEffect(() => {
     (async () => {
       try{
-        const response = await httpClient.get("//localhost:5555/check_session")
+        const response = await httpClient.get("http://localhost:5555/check_session")
         setUser(response.data)
       }
       catch(error){
@@ -94,7 +94,7 @@ function App() {
   useEffect(() => {
     (async () => {
         try {
-            const response = await httpClient.get(`//localhost:5555/users/${user.id}`)
+            const response = await httpClient.get(`http://localhost:5555/users/${user.id}`)
             setUserData(response.data)
         }
         catch (error) {
@@ -103,11 +103,10 @@ function App() {
       }) ()
   }, [user])
 
-  function addBooktoLists(id, key, title, description, publisher, language, isbn, date, rating, count, authors, cover, subject) {
+  function addBooktoLists( key, title, description, publisher, language, isbn, date, rating, count, authors, cover, subject) {
     (async () => {
       try {
-        const response = await httpClient.post("http://127.0.0.1:5555/books", {
-          "id": id,
+        const response = await httpClient.post("http://localhost:5555/books", {
           "key": key,
           "title": title,
           "description": description,
@@ -126,24 +125,26 @@ function App() {
       catch (error) {
         console.log("Book Already in Data")
       }
-  }) (id, key, title, description, publisher, language, isbn, date, rating, count, authors, cover, subject, bookInList)}
+  }) ()}
+
+  // function getBookLinks(key){
+  //   const response = httpClient.get(`http://localhost:5555/links/${key}`)
+  //   setBookLinks(response.data)
+  // }
 
   useEffect(() => {
     (async () => {
         try {
-            const response = await httpClient.get("http://127.0.0.1:5555/books")
-            setList(response.data)
+            const response = await httpClient.get("http://localhost:5555/books")
+            setBookList(response.data)
         }
         catch (error) {
-            if (error.response.status === 500){
-              console.log("Book already in data")
-            }
+          console.log(error)
         }
       }) ()
   }, [])
 
-
-  if (lists){
+  if (BookLists){
     return (
       <div className="App">
         <ThemeContextProvider>
@@ -163,10 +164,10 @@ function App() {
               </Route>
               <Route exact path="/Books">
                 <BookList
-                  books = {lists}
+                  books = {BookLists}
                 />
               </Route>
-              {lists.map((book,index) => {
+              {BookLists.map((book,index) => {
                   return (
                       <Route key={index} exact path={`/books/${book.id}`}>
                         <ListDetails

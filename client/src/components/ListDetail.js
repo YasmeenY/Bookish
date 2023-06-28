@@ -4,7 +4,7 @@ import "./Details.css"
 import AddToListButton from "./AddToListButton";
 
 function ListDetails({book, userData}){
-    const {author, title, cover, description, subjects, rating, rating_count, language, isbn, publish_date} = book
+    const {author, title, cover, description, subjects, rating, rating_count, language, isbn, publish_date, publisher} = book
 
     return(
         <div className="container">
@@ -19,12 +19,16 @@ function ListDetails({book, userData}){
                     <div>Ratings average: {rating}</div>
                     <div>Ratings Count: {rating_count}</div>
                 </div>
-                <div className="detail-container">
-                    <AddToListButton
-                        userData = {userData}
-                        book = {book.key}
-                    />
-                </div>
+                {userData !== "" ? (                  
+                    <div className="detail-container">
+                        <AddToListButton
+                            userData = {userData}
+                            book = {book.key}
+                        />
+                    </div>
+                    ):(
+                    <div></div>
+                    )}
                 <div className="detail-container">
                     <strong>Book Links: </strong>
                     <br></br>
@@ -37,6 +41,8 @@ function ListDetails({book, userData}){
                     <p className='description'>{description}</p>
                 </div>
                 <div className="detail-container">
+                    <strong>Publisher: </strong>
+                    <p> {publisher}</p>
                     <strong>Publish Date:</strong>
                     <p>{publish_date}</p>
                     <strong>ISBN: </strong>

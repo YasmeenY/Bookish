@@ -15,7 +15,7 @@ function RegisterForm() {
 
     const Register = async () => {
         try{
-            await httpClient.post("//localhost:5555/signup", {
+            await httpClient.post("http://localhost:5555/signup", {
                 username,
                 email,
                 password,

@@ -11,7 +11,6 @@ function NavBar({user, data}) {
                         <h3>Bookish</h3>
                     </div>
                 </Link>
-                {/* <button className="sort-btn" onClick={toggleTheme}>{buttonText}</button> */}
                 <div className="nav-ul">
                     <div className="active">
                         <Link to="/" className="link">

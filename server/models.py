@@ -25,9 +25,9 @@ class Book( db.Model ):
     __table_args__ = {'extend_existing': True}
 
     id = db.Column( db.Integer, primary_key=True )
-    title = db.Column( db.String, unique = True  )
+    title = db.Column( db.String )
     key = db.Column( db.String, unique = True  )
-    description = db.Column( db.Text, default=None )
+    description = db.Column( db.String, default=None )
     publisher = db.Column( db.String, default=None )
     language = db.Column( db.String, default=None )
     isbn = db.Column( db.String, default=None )
@@ -89,6 +89,6 @@ class BookLink(db.Model ):
     __table_args__ = {'extend_existing': True}
 
     id = db.Column( db.Integer, primary_key=True )
-    book_id = db.Column( db.Integer, db.ForeignKey( 'books.id' ) )
+    book_key = db.Column( db.Integer, db.ForeignKey( 'books.key' ) )
     name = db.Column( db.String )
-    url = db.Column( db.String )
+    url = db.Column( db.String, unique = True )

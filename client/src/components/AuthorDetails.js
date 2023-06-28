@@ -14,8 +14,6 @@ function AuthorDetails({authorDetails, author, cover, works, handleAuthorBooks})
         const subject_formatter = new Intl.ListFormat('en', { style: 'short', type: 'conjunction' });
         const subjects = subject_formatter.format(top_subjects)
 
-        console.log(authorDetails)
-
         return(
             <div className="container">
                 <div className="left-div">

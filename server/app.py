@@ -2,7 +2,7 @@ from flask import make_response, jsonify, request, session
 
 # Local imports
 from config import app, db, api, Resource, bcrypt
-from models import db, User, List, BookInList, Book
+from models import db, User, List, BookInList, Book, BookLink
 from sqlalchemy import func
 
 
@@ -111,6 +111,12 @@ def book_in_list_to_dict( bl ):
         "name": bl.book_name,
         "cover": bl.book_cover
     }
+def link_to_dict( link ):
+    return {
+        "id": link.id,
+        "book_key": link.book_key,
+        "name": link.name,
+    }
 def book_to_dict( book ):
     return {
         "id": book.id,
@@ -119,6 +125,7 @@ def book_to_dict( book ):
         "description": book.description,
         "language": book.language,
         "isbn": book.isbn,
+        "publisher": book.publisher,
         "publish_date": book.publish_date,
         "rating": book.rating,
         "author": book.author,
@@ -166,13 +173,23 @@ def users_by_id(id):
     else:
         return make_response( "User not found.", 404 )
     
-@app.route("/users/lists", methods=["GET"])
+@app.route("/users/lists", methods=["GET", "POST"])
 def lists():
     if request.method == "GET":
         lists = [list_to_dict( list ) for list in List.query.all()]
         return make_response( jsonify( lists ), 200)
+    if request.method == "POST":
+        name = request.get_json()[ 'name' ]
+        user_id = request.get_json()[ 'user_id' ]
+        new_list = List(
+            name = name,
+            user_id = user_id
+        )
+        db.session.add( new_list )
+        db.session.commit()
+        return make_response( jsonify( list_to_dict( new_list ) ), 201 )
 
-@app.route( '/users/lists/<int:id>', methods=[ "GET", "DELETE", "PATCH" ])
+@app.route( '/users/lists/<int:id>', methods=[ "GET", "DELETE" ])
 def lists_by_id(id):
     list = List.query.filter( List.id == id ).first()
     if list:
@@ -188,15 +205,6 @@ def lists_by_id(id):
             db.session.commit()
             return make_response("", 204)
 
-        elif request.method == "PATCH":
-            list_data = request.get_json()
-            for attr in list_data:
-                setattr(list, attr, list_data[attr])
-            db.session.add(list)
-            db.session.commit()
-            list_dict = list_to_dict(list)
-            list_dict["books"]= [book_in_list_to_dict(r) for r in BookInList.query.filter(BookInList.list_id == id).all()]
-            return make_response( jsonify( list_dict ), 200 )
     else:
         return make_response( "List not found.", 404 )
 
@@ -232,9 +240,9 @@ def Books():
     if request.method == "GET":
         books = [book_to_dict( book ) for book in Book.query.all()]
         return make_response( jsonify( books ), 200)
+
     if request.method == "POST":
         new_Book = Book(
-            id = request.get_json()[ "id" ],
             title = request.get_json()[ 'title' ],
             key = request.get_json()[ 'key' ],
             description = request.get_json()[ 'description' ],
@@ -248,13 +256,14 @@ def Books():
             cover = request.get_json()[ 'cover' ],
             subjects = request.get_json()[ 'subjects' ]
         )
+
         db.session.add( new_Book )
         db.session.commit()
         return make_response( jsonify( book_to_dict( new_Book ) ), 201)
 
-@app.route( '/books/<int:id>', methods=[ "GET" ])
-def Books_by_id(id):
-    book = Book.query.filter( Book.id == id ).first()
+@app.route( '/books/<int:key>', methods=[ "GET" ])
+def Books_by_id(key):
+    book = Book.query.filter( Book.key == key ).first()
     if book:
         if request.method == "GET":
             book_dict = book_to_dict(book)
@@ -266,17 +275,37 @@ def random_books():
     if request.method == "GET":
         books = [book_to_dict( book ) for book in Book.query.order_by(func.random()).limit(10).all()]
         return make_response( jsonify( books ), 200)
+
 @app.route( '/books/<string:key>', methods=[ "GET" ])
 def get_book_by_key(key):
     if request.method == "GET":
         book = Book.query.filter(Book.key == key).first()
         book_dict = book_to_dict(book)
         return make_response( jsonify( book_dict ), 200)
-@app.route( '/books/lastId', methods=[ "GET" ])
-def get_last_Id():
+    
+@app.route( '/links', methods=[ "POST" ])
+def post_link():
+    if request.method == "POST":
+        name = request.get_json()[ 'name' ]
+        book_key = request.get_json()[ 'book_key' ]
+        url = request.get_json()[ 'url' ]
+
+        new_link = BookLink(
+            name = name,
+            book_key = book_key,
+            url = url
+        )
+        db.session.add( new_link )
+        db.session.commit()
+        return make_response( jsonify( link_to_dict(new_link) ), 201)
+
+@app.route( '/books/links/<int:key>', methods=["GET"])
+def get_add_links(key):
     if request.method == "GET":
-        book = Book.query.order_by(Book.id.desc()).first()
-        id = book.id + 1
-        return make_response( jsonify( id ), 200)
+        links = BookLink.query.filter(BookLink.book_key == key).all()
+        link_dict = [link_to_dict(l) for l in links]
+        return make_response( jsonify( link_dict ), 200)
+
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

@@ -12,7 +12,7 @@ function LogInForm() {
 
     const LogIn = async () => {
         try{
-            await httpClient.post("//localhost:5555/login", {
+            await httpClient.post("http://localhost:5555/login", {
                 username,
                 password,
             })

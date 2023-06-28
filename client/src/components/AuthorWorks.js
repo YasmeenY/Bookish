@@ -7,7 +7,6 @@ import "./Details.css";
 function AuthorWorks({book, cover, bookS, userData, addBooktoLists}){
     const [edition, setEdition] = useState("")
     const [rating, setRating] = useState("")
-    const [bookId, setBookId] = useState(0)
 
     useEffect(() => {
         (async () => {
@@ -16,17 +15,9 @@ function AuthorWorks({book, cover, bookS, userData, addBooktoLists}){
             }) ()
     }, [book.key])
 
-    useEffect(()=>{
-        fetch(`http://127.0.0.1:5555/books/lastId`)
-        .then(r=>r.json())
-        .then(data => {
-            setBookId(data)
-        }) 
-    }, [])
-
     const average = Math.round(rating.average * 100) / 100
     const count = rating.count
-    const {title, key} = book
+    const {title} = book
     const {author_name, lending_edition_s, publish_date, language, subject} = bookS
 
     let description = ""
@@ -65,14 +56,20 @@ function AuthorWorks({book, cover, bookS, userData, addBooktoLists}){
 
     let result = book.key?.slice(7)
 
+    let descriptionType = typeof description
+
     useEffect(()=>{
-        if(description !== "object"){
-            addBooktoLists(bookId, result, title, description, publisher, languages, isbn, publish_date[0], average, count, authors, cover, subjects)
+        if(descriptionType === "string"){
+            addBooktoLists( result, title, description, publisher, languages, isbn, publish_date[0], average, count, authors, cover, subjects )
+        }
+        else if(typeof description === "object"){
+            addBooktoLists( result, title, description.value, publisher, languages, isbn, publish_date[0], average, count, authors, cover, subjects )
         }
         else{
-            addBooktoLists(bookId, result, title, description.value, publisher, languages, isbn, publish_date[0], average, count, authors, cover, subjects)
+            addBooktoLists( result, title, "No Description :(", publisher, languages, isbn, publish_date[0], average, count, authors, cover, subjects )
         }
-    }, [bookId, result, title, description, publisher, languages, isbn, publish_date, average, count, authors, cover, subjects, addBooktoLists])
+    }, [ descriptionType, result, title, description, publisher, languages, isbn, publish_date, average, count, authors, cover, subjects, addBooktoLists ] )
+
 
     if(rating){
         return(
@@ -90,12 +87,16 @@ function AuthorWorks({book, cover, bookS, userData, addBooktoLists}){
                             <div>Ratings Count: {count}</div>
                         </div>
                     </div>
-                    <div className="detail-container">
-                        <AddToListButton
-                            userData = {userData}
-                            book = {result}
-                        />
-                    </div>
+                    {userData !== "" ? (                  
+                        <div className="detail-container">
+                            <AddToListButton
+                                userData = {userData}
+                                book = {result}
+                            />
+                        </div>
+                    ):(
+                        <div></div>
+                    )}
                     <div className="detail-container">
                         <strong>Book Links: </strong>
                         <br></br>
