@@ -1,5 +1,4 @@
-from random import randint, choice as rc
-
+from random import randint, sample
 from faker import Faker
 
 from app import app
@@ -27,6 +26,7 @@ if __name__ == '__main__':
         DESCRIPTION = []
         DATE = []
         SUBJECTS = []
+        KEY = sample(range(9999), 99)
 
         for author in authors:
             AUTHOR_NAMES.append(author.replace("\n",""))
@@ -57,7 +57,7 @@ if __name__ == '__main__':
         for i in range(99):
             book = Book(
                 title = TITLES[i],
-                key = f"OL{randint(100,9999)}",
+                key = f"OL{KEY[i]}",
                 description = DESCRIPTION[i],
                 language = "eng",
                 isbn = ISBN[i],
