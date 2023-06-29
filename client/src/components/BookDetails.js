@@ -3,6 +3,7 @@ import Rating from '@mui/material/Rating';
 import AddToListButton from "./AddToListButton";
 import axios from "axios";
 import "./Details.css";
+import useRunOnce from './useRunOnce';
 
 function BookDetails({bookDetails, cover, book, userData, addBooktoLists}) {
     const [edition, setEdition] = useState("")
@@ -68,8 +69,8 @@ function BookDetails({bookDetails, cover, book, userData, addBooktoLists}) {
         }
     }, [descriptionType, result, title, description, publisher, languages, isbn, publish_date, average, count, authors, cover, subject, addBooktoLists])
 
-    useEffect(()=>{
-        try{
+    useRunOnce({
+        fn: () => {
             links?.map((link)=>{
                 axios.post(`http://localhost:5555/links`, {
                     "name": link.title,
@@ -77,11 +78,9 @@ function BookDetails({bookDetails, cover, book, userData, addBooktoLists}) {
                     "book_key": result
                 })
             })
-        }
-        catch(error){
-            console.log("error")
-        }
-    }, [])
+        },
+        sessionKey: "changeMeAndFnWillRerun"
+    });
 
     if (edition){
         return (
@@ -155,6 +154,13 @@ function BookDetails({bookDetails, cover, book, userData, addBooktoLists}) {
                 </div>
             </div>
         )
-    }}
+    }else{
+        return(
+            <div className="loader-container">
+                <div className="loader"></div>
+            </div>
+        )
+    }
+}
 
 export default BookDetails;

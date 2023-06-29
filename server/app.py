@@ -116,6 +116,7 @@ def link_to_dict( link ):
         "id": link.id,
         "book_key": link.book_key,
         "name": link.name,
+        "url": link.url
     }
 def book_to_dict( book ):
     return {
@@ -299,7 +300,7 @@ def post_link():
         db.session.commit()
         return make_response( jsonify( link_to_dict(new_link) ), 201)
 
-@app.route( '/books/links/<int:key>', methods=["GET"])
+@app.route( '/books/links/<string:key>', methods=["GET"])
 def get_add_links(key):
     if request.method == "GET":
         links = BookLink.query.filter(BookLink.book_key == key).all()

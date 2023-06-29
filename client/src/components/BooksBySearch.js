@@ -2,7 +2,7 @@ import React from "react";
 import BookBox from "./BookBox";
 import "./App.css";
 
-function BooksBySearch({bookS, handleBookDetails, linkSetter, history}){
+function BooksBySearch({bookS, handleBookDetails, linkSetter, history, loader}){
     if(bookS){
         return (
             <div className="search-results">
@@ -31,8 +31,12 @@ function BooksBySearch({bookS, handleBookDetails, linkSetter, history}){
                 })}
             </div>
         )
-    }else{
-        <div>Loading...</div>
+    }else if(loader === true){
+        return(
+            <div className="loader-container">
+                <div className="loader"></div>
+            </div>
+        )
     }
 }
 

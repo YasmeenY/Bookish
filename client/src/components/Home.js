@@ -27,7 +27,7 @@ function Home() {
             <div>
                 <div className="details-container">
                     <h3>Discover Books: </h3>
-                    <button 
+                    <div 
                         className="more-button" 
                         onClick={() => history.push(`/Books`)}
                     >
@@ -39,7 +39,7 @@ function Home() {
                         >
                             {"See More >>"}
                         </Button>
-                    </button>
+                    </div>
                     <div className="search-results">
                         {books?.map((book, index)=>{
                             return (

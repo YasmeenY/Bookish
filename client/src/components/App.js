@@ -13,6 +13,7 @@ import AuthorDetails from './AuthorDetails';
 import AuthorWorks from './AuthorWorks';
 import BookList from './BookLists';
 import ListDetails from "./ListDetail";
+import axios from 'axios';
 
 function App() {
   const [user, setUser] = useState("")
@@ -27,6 +28,7 @@ function App() {
   const [authorBook, setAuthorBook] = useState("")
   const [BookLists, setBookList] = useState("")
   const [bookInList, setBookInList] = useState("")
+  const [ bookLinks, setBookLinks ] = useState("")
 
   function handleBookDetails(book){
     fetch(`https://openlibrary.org${book.key}.json`)
@@ -106,7 +108,7 @@ function App() {
   function addBooktoLists( key, title, description, publisher, language, isbn, date, rating, count, authors, cover, subject) {
     (async () => {
       try {
-        const response = await httpClient.post("http://localhost:5555/books", {
+        const response = await axios.post("http://localhost:5555/books", {
           "key": key,
           "title": title,
           "description": description,
@@ -127,10 +129,18 @@ function App() {
       }
   }) ()}
 
-  // function getBookLinks(key){
-  //   const response = httpClient.get(`http://localhost:5555/links/${key}`)
-  //   setBookLinks(response.data)
-  // }
+  function getBookLinks(key){
+    try{
+      const url = `http://localhost:5555/books/links/${key}`
+      fetch(url)
+      .then(r=>r.json())
+      .then(data => {
+        setBookLinks(data)})
+    }
+    catch(error){
+      console.log("error")
+    }
+  }
 
   useEffect(() => {
     (async () => {
@@ -143,6 +153,7 @@ function App() {
         }
       }) ()
   }, [])
+
 
   if (BookLists){
     return (
@@ -173,6 +184,8 @@ function App() {
                         <ListDetails
                             book = {book}
                             userData = {userData}
+                            getBookLinks = {getBookLinks}
+                            bookLinks = {bookLinks}
                         />
                       </Route>
                   )

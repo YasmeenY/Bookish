@@ -1,6 +1,6 @@
 import React from "react";
 
-function AuthorsBySearch({authorS, history, handleAuthorDetails, handleWorks}){
+function AuthorsBySearch({authorS, history, handleAuthorDetails, handleWorks, loader}){
     let authors = authorS.docs
 
     if(authorS){
@@ -22,8 +22,12 @@ function AuthorsBySearch({authorS, history, handleAuthorDetails, handleWorks}){
                 }
             </div>
         )
-    }else{
-        <h3>Loading..</h3>
+    }else if(loader === true){
+        return(
+            <div className="loader-container">
+                <div className="loader"></div>
+            </div>
+        )
     }
 }
 

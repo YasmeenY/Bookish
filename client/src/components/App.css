@@ -83,3 +83,42 @@ code {
   flex-wrap: wrap;
   justify-content: center;
 }
+
+.loader-container{
+  width: 69%;
+  margin: 0 auto;
+  margin-top: 25px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(200px,0.5fr));
+  grid-gap:20px;
+  box-sizing: border-box;
+  display: flex;
+  margin-right: 3rem;
+  align-items: center;
+  position: relative;
+}
+
+.loader {
+  border: 10px solid #e66bdf; 
+  border-top: 10px solid #3e0b45; 
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  top: 0%;
+  margin-left: 20rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width:700px){
+  .loader {
+      margin-left: 10rem;
+  }
+  .loader-container {
+      margin-left: 10rem;
+  }
+}

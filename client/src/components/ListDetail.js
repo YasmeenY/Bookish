@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Rating from '@mui/material/Rating';
 import "./Details.css"
 import AddToListButton from "./AddToListButton";
 
-function ListDetails({book, userData}){
+function ListDetails({book, userData, getBookLinks, bookLinks}){
     const {author, title, cover, description, subjects, rating, rating_count, language, isbn, publish_date, publisher} = book
+
+    useEffect(()=>{
+        try{
+            getBookLinks(book.key)
+            console.log(bookLinks)
+        }
+        catch(error){
+            console.log("Invalid")
+        }
+    },[])
 
     return(
         <div className="container">
@@ -33,6 +43,13 @@ function ListDetails({book, userData}){
                     <strong>Book Links: </strong>
                     <br></br>
                     <a className='link' href={`https://en.wikipedia.org/wiki/${title}`} target="_blank" rel="noopener noreferrer">Wikipedia</a>
+                    {bookLinks ? (bookLinks?.map((link)=>{
+                        return(
+                            <div>
+                                <a className='link' href={link.url} target="_blank" rel="noopener noreferrer">{link.name}</a>
+                            </div>
+                        )
+                    })):(<></>)}
                 </div>
             </div>
             <div className="right-div">

@@ -13,6 +13,7 @@ import "./App.css"
 
 function Search({SearchSetter, handleSearch, bookS, search, linkSetter, handleBookDetails, handleAuthorSearch, authorS, handleAuthorDetails, handleWorks}) {
     const [change, setChange] = useState(false)
+    const [loader, setLoader] = useState(false)
     function handleChange(change){
         setChange(change)
     }
@@ -43,7 +44,9 @@ function Search({SearchSetter, handleSearch, bookS, search, linkSetter, handleBo
                                 className="buttons"
                                 onClick={() => {
                                     handleChange(false)
-                                    handleSearch()}}
+                                    handleSearch()
+                                    setLoader(true)
+                                }}
                             >
                                 <Button
                                     startIcon={<BookIcon />}
@@ -57,7 +60,9 @@ function Search({SearchSetter, handleSearch, bookS, search, linkSetter, handleBo
                                 className="buttons"
                                 onClick={() => {
                                     handleChange(true)
-                                    handleAuthorSearch()}}
+                                    handleAuthorSearch()
+                                    setLoader(true)
+                                }}
                             >
                                 <Button
                                     startIcon={<Person4Icon />}
@@ -76,6 +81,7 @@ function Search({SearchSetter, handleSearch, bookS, search, linkSetter, handleBo
                             history={history}
                             handleAuthorDetails={handleAuthorDetails}
                             handleWorks={handleWorks}
+                            loader={loader}
                         />
                     </div>
                     ):(
@@ -84,6 +90,7 @@ function Search({SearchSetter, handleSearch, bookS, search, linkSetter, handleBo
                             handleBookDetails={handleBookDetails}
                             linkSetter={linkSetter}
                             history={history}
+                            loader={loader}
                         />
                     )}
                 </div>

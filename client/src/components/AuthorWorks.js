@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import Rating from '@mui/material/Rating';
 import AddToListButton from "./AddToListButton";
+import useRunOnce from './useRunOnce';
 import "./Details.css";
 
 function AuthorWorks({book, cover, bookS, userData, addBooktoLists}){
@@ -70,7 +71,6 @@ function AuthorWorks({book, cover, bookS, userData, addBooktoLists}){
         }
     }, [ descriptionType, result, title, description, publisher, languages, isbn, publish_date, average, count, authors, cover, subjects, addBooktoLists ] )
 
-
     if(rating){
         return(
             <div className="container">
@@ -121,6 +121,13 @@ function AuthorWorks({book, cover, bookS, userData, addBooktoLists}){
                         <p>{subjects}</p>
                     </div>
                 </div>
+            </div>
+        )
+    }
+    else{
+        return(
+            <div className="loader-container">
+                <div className="loader"></div>
             </div>
         )
     }
