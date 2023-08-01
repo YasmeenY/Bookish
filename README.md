@@ -31,6 +31,7 @@ On the right side you can view your lists, delete them or delete books from list
 ![Screenshot 2023-08-01 083007](https://github.com/YasmeenY/Bookish/assets/90418738/ee323a79-9f64-4c7e-b712-44bbd0d408a3)
 
 By clicking on the Books You can see the Book's info or add that book to a list. Adding to lists can only be seen if you are logged in
+
 ![Screenshot 2023-08-01 083802](https://github.com/YasmeenY/Bookish/assets/90418738/83596ca3-08ee-4159-93bd-aad287d7b61c)
 
 
