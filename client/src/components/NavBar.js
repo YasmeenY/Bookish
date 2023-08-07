@@ -2,7 +2,7 @@ import {Link} from "react-router-dom";
 import UserIcon from "../Images/UserIcon.png";
 import "./NavBar.css";
 
-function NavBar({user, data}) {
+function NavBar({user}) {
     return (
         <header>
             <nav className="nav">
@@ -30,7 +30,7 @@ function NavBar({user, data}) {
                     {user !== "" ? (
                         <div className="user-icon-container">
                             <Link to="/profile" className="link">
-                                <img src={data.image} alt="No Logo Available"></img>
+                                <img src={user.image} alt="No Logo Available"></img>
                             </Link>
                         </div>
                     ): (

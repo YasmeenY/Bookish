@@ -29,7 +29,7 @@ function Profile({data}) {
 
     const changeUserImage = async () => {
         try{
-            await httpClient.patch(`http://localhost:5555/${data.id}`, {
+            await httpClient.patch(`http://localhost:5555/users/${data.id}`, {
                 image: userImage,
             })
             window.location.href = "/profile"
@@ -54,7 +54,9 @@ function Profile({data}) {
             "name": listName,
             "user_id": data.id
         })
-        window.location.href = "/profile"
+        setTimeout(function(){
+            window.location.reload();
+        }, 500);
     }
 
     const handleListName = (e) => {
@@ -63,12 +65,16 @@ function Profile({data}) {
 
     const deleteList = (id) => {
         httpClient.delete(`http://localhost:5555/users/lists/${id}`)
-        window.location.href = "/profile"
+        setTimeout(function(){
+            window.location.reload();
+        }, 500);
     }
 
-    const deleteBook = (id, listId) => {
+    const deleteBook = (id) => {
         httpClient.delete(`http://localhost:5555/booksInLists/${id}`)
-        window.location.href = "/profile"
+        setTimeout(function(){
+            window.location.reload();
+        }, 500);
     }
 
     const style = {

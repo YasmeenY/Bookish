@@ -1,6 +1,7 @@
 from sqlalchemy.orm import validates
 from sqlalchemy.ext.associationproxy import association_proxy
 from config import db, bcrypt
+from flask import abort
 
 # Models go here:
 class User( db.Model ):
@@ -92,3 +93,10 @@ class BookLink(db.Model ):
     book_key = db.Column( db.Integer, db.ForeignKey( 'books.key' ) )
     name = db.Column( db.String )
     url = db.Column( db.String, unique = True )
+
+    @validates( 'user_id' )
+    def validate_user_id( self, key, user_id ):
+        if isinstance( user_id, int ) and user_id > 0:
+            return user_id
+        else:
+            abort( 422, "User id must be a number greater than 0." )
