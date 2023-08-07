@@ -18,3 +18,21 @@ Bookish is a web application that allows users to Search for Books, and organize
 - Material UI: open-source React component library that implements Google's Material Design.
 - HTML, CSS, JavaScript: Front-end technologies for building the user interface.
 - Python, Flask, Flask RESTful, SQLALCHEMY
+
+## Visuals
+Searching for Books and Authors
+![Screenshot 2023-08-01 083107](https://github.com/YasmeenY/Bookish/assets/90418738/8bb3ddb8-18d4-43b2-94e4-20c91a4d6d77)
+
+User profile:
+You can create new lists, change user image or delete account from the left side
+![Screenshot 2023-08-01 083052](https://github.com/YasmeenY/Bookish/assets/90418738/023351ba-350a-475b-a586-be83c84cd8ba)
+
+On the right side you can view your lists, delete them or delete books from lists
+![Screenshot 2023-08-01 083007](https://github.com/YasmeenY/Bookish/assets/90418738/ee323a79-9f64-4c7e-b712-44bbd0d408a3)
+
+By clicking on the Books You can see the Book's info or add that book to a list. Adding to lists can only be seen if you are logged in
+
+![Screenshot 2023-08-01 083802](https://github.com/YasmeenY/Bookish/assets/90418738/83596ca3-08ee-4159-93bd-aad287d7b61c)
+
+
+
