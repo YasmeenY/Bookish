@@ -29,6 +29,7 @@ function App() {
   const [BookLists, setBookList] = useState("")
   const [bookInList, setBookInList] = useState("")
   const [ bookLinks, setBookLinks ] = useState("")
+  const [googBooks, setGoogBooks] = useState("")
 
   function handleBookDetails(book){
     fetch(`https://openlibrary.org${book.key}.json`)
@@ -53,12 +54,15 @@ function App() {
     setLink(search)
   }
 
+
   function handleSearch(){
-      const url = `https://openlibrary.org/search.json?title=${encodeURIComponent(search.toLowerCase())}`
+      const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(search.toLowerCase())}&key=AIzaSyAIH5tQralEtfJsBC834YFRNfOOekXrdJQ`
       fetch(url)
       .then(r=>r.json())
       .then(data => setBookS(data))
   }
+
+  console.log(bookS)
 
   function handleWorks(author){
     const url = `https://openlibrary.org/authors/${author}/works.json`
@@ -153,7 +157,6 @@ function App() {
         }
       }) ()
   }, [])
-
 
   if (BookLists){
     return (

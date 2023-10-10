@@ -2,18 +2,19 @@ from sqlalchemy.orm import validates
 from sqlalchemy.ext.associationproxy import association_proxy
 from config import db, bcrypt
 from flask import abort
+from sqlalchemy_serializer import SerializerMixin
 
 # Models go here:
-class User( db.Model ):
+class User( db.Model, SerializerMixin ):
     __tablename__ = 'users'
-    __table_args__ = {'extend_existing': True}
+    serialize_rules = ('-books_in_lists.user',)
 
     id = db.Column( db.Integer, primary_key=True )
     username = db.Column( db.String )
     email = db.Column( db.String, unique = True )
     password = db.Column( db.Text )
     image = db.Column( db.String, default="https://vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png" )
-    lists = db.relationship( "List", backref = "user" )
+    books_in_lists = db.relationship( "List", backref = "user" )
 
     def authenticate( self, password ):
         return bcrypt.check_password_hash(
@@ -21,9 +22,9 @@ class User( db.Model ):
         )
 
 
-class Book( db.Model ):
+class Book( db.Model, SerializerMixin ):
     __tablename__ = 'books'
-    __table_args__ = {'extend_existing': True}
+    serialize_rules = ('-book_authors.book','-links.book',)
 
     id = db.Column( db.Integer, primary_key=True )
     title = db.Column( db.String )
@@ -40,13 +41,12 @@ class Book( db.Model ):
     subjects = db.Column( db.String, default=None )
 
     book_authors = db.relationship( "BookAuthor", backref = "book")
-    authors = association_proxy("book-authors", "author")
     links = db.relationship( "BookLink", backref = "book" )
 
 
-class Author( db.Model ):
+class Author( db.Model, SerializerMixin ):
     __tablename__ = 'authors'
-    __table_args__ = {'extend_existing': True}
+    serialize_rules = ('-books.author',)
 
     id = db.Column( db.Integer, primary_key=True )
     name = db.Column( db.String )
@@ -54,21 +54,20 @@ class Author( db.Model ):
     bio = db.Column( db.String )
     work_count = db.Column( db.Integer )
 
-    book_authors = db.relationship( "BookAuthor", backref = "author")
-    books = association_proxy("book-authors", "book")
+    books = db.relationship( "BookAuthor", backref = "author")
 
-class List( db.Model ):
+class List( db.Model,SerializerMixin ):
     __tablename__ = 'lists'
-    __table_args__ = {'extend_existing': True}
+    serialize_rules = ('-books.lists',)
 
     id = db.Column( db.Integer, primary_key=True )
     name = db.Column( db.String )
     user_id = db.Column( db.Integer, db.ForeignKey( 'users.id' ) )
     books = db.relationship( "BookInList", backref = "list")
 
-class BookInList( db.Model ):
-    __tablename__ = 'books-in-lists'
-    __table_args__ = {'extend_existing': True}
+class BookInList( db.Model, SerializerMixin ):
+    __tablename__ = 'books_in_lists'
+    serialize_rules = ('-book.books_in_lists','-user.books_in_lists','-list.books_in_lists')
 
     id = db.Column( db.Integer, primary_key=True )
     book_name = db.Column( db.String )
@@ -77,17 +76,17 @@ class BookInList( db.Model ):
     list_id = db.Column( db.Integer, db.ForeignKey( 'lists.id' ) )
     user_id = db.Column( db.Integer, db.ForeignKey( 'users.id' ) )
 
-class BookAuthor( db.Model ):
-    __tablename__ = 'book-authors'
-    __table_args__ = {'extend_existing': True}
+class BookAuthor( db.Model, SerializerMixin ):
+    __tablename__ = 'book_authors'
+    serialize_rules = ('-book.BookAuthor','-author.BookAuthor')
 
     id = db.Column( db.Integer, primary_key=True )
     book_id = db.Column( db.Integer, db.ForeignKey( 'books.id' ) )
     author_id = db.Column( db.Integer, db.ForeignKey( 'authors.id' ) )
 
-class BookLink(db.Model ):
+class BookLink(db.Model, SerializerMixin ):
     __tablename__ = 'links'
-    __table_args__ = {'extend_existing': True}
+    serialize_rules = ('-book.BookLink',)
 
     id = db.Column( db.Integer, primary_key=True )
     book_key = db.Column( db.Integer, db.ForeignKey( 'books.key' ) )
