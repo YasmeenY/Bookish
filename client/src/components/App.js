@@ -31,13 +31,13 @@ function App() {
   const [ bookLinks, setBookLinks ] = useState("")
   const [googBooks, setGoogBooks] = useState("")
 
-  function handleBookDetails(book){
-    fetch(`https://openlibrary.org${book.key}.json`)
-    .then(r=>r.json())
-    .then(data => {
-      setBookDetails(data)
-    })
-  }
+  // function handleBookDetails(book){
+  //   fetch(`https://openlibrary.org${book.key}.json`)
+  //   .then(r=>r.json())
+  //   .then(data => {
+  //     setBookDetails(data)
+  //   })
+  // }
 
   function handleAuthorBooks(book){
     const url = `https://openlibrary.org/search.json?title=${encodeURIComponent(book.toLowerCase())}`
@@ -57,16 +57,11 @@ function App() {
 
   function handleSearch(){
     let book = encodeURIComponent(search.toLowerCase())
-      // const url = `https://openlibrary.org/search.json?title=${encodeURIComponent(search.toLowerCase())}`
-      // fetch(url)
-      // .then(r=>r.json())
-      // .then(data => setBookS(data))
     const response = httpClient.post("http://localhost:5555/search", {
       "book": book
     })
-    .then(data => {setBookS(data.data.volumeInfo)})
+    .then(data => {setBookS(data.data)})
   }
-  console.log(bookS)
   
   function handleWorks(author){
     const url = `https://openlibrary.org/authors/${author}/works.json`
@@ -172,6 +167,7 @@ function App() {
             />
             <Switch>
               <Route path='/' exact component={Home} />
+              {/* <Route path='/FzVjBgAAQBAJ' exact component={Testing} /> */}
               <Route path='/sign' exact component={Sign} />
               <Route exact path="/profile">
                 <Profile
@@ -204,33 +200,18 @@ function App() {
                   bookS = {bookS}
                   search = {search}
                   linkSetter = {linkSetter}
-                  handleBookDetails = {handleBookDetails}
+                  setGoogBooks = {setGoogBooks}
                   handleAuthorSearch = {handleAuthorSearch}
                   authorS = {authorS}
                   handleAuthorDetails = {handleAuthorDetails}
                   handleWorks = {handleWorks}
                 />
               </Route>
-              {bookS.docs?.map((book, index)=>{
-                return (
-                  <Route key={index} exact path={link}>
-                    <BookDetails
-                      book = {book}
-                      userData = {userData}
-                      bookDetails={bookDetails}
-                      bookInList = {bookInList}
-                      addBooktoLists = {addBooktoLists}
-                      cover = {
-                        typeof bookDetails["covers"] === "undefined" 
-                        ? 
-                        `https://bookcart.azurewebsites.net/Upload/Default_image.jpg` 
-                        :
-                        `https://covers.openlibrary.org/b/id/${bookDetails["covers"][0]}-M.jpg`
-                      }
-                    />
-                  </Route>
-                )
-              })}
+              <Route exact path ={`/${googBooks.id}`}>
+                <BookDetails
+                  book = {googBooks.volumeInfo}
+                />
+              </Route>
               {authorS.docs?.map((author, index)=>{
                 return (
                   <Route key={index} exact path={`/author/${author.key}`}>

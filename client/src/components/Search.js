@@ -11,7 +11,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import "./App.css"
 
 
-function Search({SearchSetter, handleSearch, bookS, search, linkSetter, handleBookDetails, handleAuthorSearch, authorS, handleAuthorDetails, handleWorks}) {
+function Search({SearchSetter, setGoogBooks, handleSearch, bookS, search, linkSetter, handleAuthorSearch, authorS, handleAuthorDetails, handleWorks}) {
     const [change, setChange] = useState(false)
     const [loader, setLoader] = useState(false)
     function handleChange(change){
@@ -87,10 +87,10 @@ function Search({SearchSetter, handleSearch, bookS, search, linkSetter, handleBo
                     ):(
                         <BooksBySearch
                             bookS={bookS}
-                            handleBookDetails={handleBookDetails}
                             linkSetter={linkSetter}
                             history={history}
                             loader={loader}
+                            setGoogBooks = {setGoogBooks}
                         />
                     )}
                 </div>

@@ -2,7 +2,8 @@ import React from "react";
 import BookBox from "./BookBox";
 import "./App.css";
 
-function BooksBySearch({bookS, handleBookDetails, linkSetter, history, loader}){
+function BooksBySearch({bookS, history, loader, setGoogBooks}){
+
     if(bookS){
         return (
             <div className="search-results">
@@ -12,13 +13,13 @@ function BooksBySearch({bookS, handleBookDetails, linkSetter, history, loader}){
                             className="book-box"
                             key = {index}
                             onClick={() => {
-                                handleBookDetails(book)
-                                linkSetter(`/book${book.key}`)
-                                history.push(`/book${book.key}`)}}
+                                history.push(`/${book.id}`)
+                                setGoogBooks(book)
+                            }}
                         >
                             <BookBox
-                                cover = {book.imageLinks.thumbnail}
-                                title = {book.title}
+                                cover = {book.volumeInfo.imageLinks.thumbnail}
+                                title = {book.volumeInfo.title}
                             />
                         </div>
                     )

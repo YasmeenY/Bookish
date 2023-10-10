@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import Rating from '@mui/material/Rating';
 import AddToListButton from "./AddToListButton";
-import useRunOnce from './useRunOnce';
 import "./Details.css";
 
 function AuthorWorks({book, cover, bookS, userData, addBooktoLists}){
