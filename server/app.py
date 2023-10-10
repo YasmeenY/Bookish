@@ -86,21 +86,30 @@ class CheckSession( Resource ):
         else:
             return {}, 204
 class SearchBook( Resource ):
-    def get_books():
+    def post( self ):
         api_key = "AIzaSyBCZqzHd9Ciqm480vxJVLx1mv2fCSaHfEg"
-        if request.method == "POST":
-            book = request.get_json()[ 'book' ] 
-            url =f"https://www.googleapis.com/books/v1/volumes?q=intitle:{book}&key={api_key}" 
-            response = urllib.request.urlopen(url) 
-            data = response.read() 
-            jsondata = json.loads(data) 
-            return make_response(jsondata["items"])
+        book = request.get_json()[ 'book' ] 
+        url =f"https://www.googleapis.com/books/v1/volumes?q=intitle:{book}&key={api_key}" 
+        response = urllib.request.urlopen(url) 
+        data = response.read() 
+        json_data = json.loads(data) 
+        return make_response(json_data["items"])
+class SearchAuthor( Resource ):
+    def post( self ):
+        api_key = "AIzaSyBCZqzHd9Ciqm480vxJVLx1mv2fCSaHfEg"
+        author = request.get_json()[ 'author' ] 
+        url =f"https://www.googleapis.com/books/v1/volumes?q=inauthor:{author}&key={api_key}" 
+        response = urllib.request.urlopen(url) 
+        data = response.read() 
+        json_data = json.loads(data) 
+        return make_response(json_data["items"])
 
 api.add_resource( Signup, '/signup', endpoint = 'signup' )
 api.add_resource( Login, '/login', endpoint='login' )
 api.add_resource( Logout, '/logout', endpoint='logout' )
 api.add_resource( CheckSession, '/check_session', endpoint='check_session' )
-api.add_resource( CheckSession, '/search', endpoint='search' )
+api.add_resource( SearchBook, '/search', endpoint='search' )
+api.add_resource( SearchAuthor, '/search_author', endpoint='search_author' )
 
 def user_to_dict( user ):
     return {
