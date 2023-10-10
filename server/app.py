@@ -1,13 +1,11 @@
-from flask import make_response, jsonify, request, session, render_template
+from flask import make_response, jsonify, request, session
 
 # Local imports
 from config import app, db, api, Resource, bcrypt
 from models import db, User, List, BookInList, Book, BookLink
 from sqlalchemy import func
-import os
 import urllib
 import json
-import requests
 
 
 @app.route("/")
@@ -68,7 +66,7 @@ class Login( Resource ):
 
         if user.authenticate( password ):
             session[ 'user_id' ] = user.id
-            return make_response(jsonify(user.to_dict())), 200
+            return user_to_dict( user ), 200
 
         else:
             return { "error": "Members Only Content, Unauthorized Access!"}, 401
@@ -84,14 +82,25 @@ class CheckSession( Resource ):
     def get( self ):
         if session.get( 'user_id' ):
             user = User.query.filter( User.id == session[ 'user_id' ]).first()
-            return user.to_dict(), 200
+            return user_to_dict( user ), 200
         else:
             return {}, 204
+class SearchBook( Resource ):
+    def get_books():
+        api_key = "AIzaSyBCZqzHd9Ciqm480vxJVLx1mv2fCSaHfEg"
+        if request.method == "POST":
+            book = request.get_json()[ 'book' ] 
+            url =f"https://www.googleapis.com/books/v1/volumes?q=intitle:{book}&key={api_key}" 
+            response = urllib.request.urlopen(url) 
+            data = response.read() 
+            jsondata = json.loads(data) 
+            return make_response(jsondata["items"])
 
 api.add_resource( Signup, '/signup', endpoint = 'signup' )
 api.add_resource( Login, '/login', endpoint='login' )
 api.add_resource( Logout, '/logout', endpoint='logout' )
 api.add_resource( CheckSession, '/check_session', endpoint='check_session' )
+api.add_resource( CheckSession, '/search', endpoint='search' )
 
 def user_to_dict( user ):
     return {
@@ -310,19 +319,6 @@ def get_add_links(key):
         links = BookLink.query.filter(BookLink.book_key == key).all()
         link_dict = [link_to_dict(l) for l in links]
         return make_response( jsonify( link_dict ), 200)
-    
-#search for books using title, url encode from front end
-@app.route("/search", methods=["GET", "POST"])
-def get_books():
-    api_key = "AIzaSyBCZqzHd9Ciqm480vxJVLx1mv2fCSaHfEg"
-    if request.method == "POST":
-        book = request.get_json()[ 'book' ] 
-        url =f"https://www.googleapis.com/books/v1/volumes?q=intitle:{book}&key=AIzaSyBCZqzHd9Ciqm480vxJVLx1mv2fCSaHfEg" 
-        response = urllib.request.urlopen(url) 
-        data = response.read() 
-        jsondata = json.loads(data) 
-        return make_response(jsondata["items"])
-
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
