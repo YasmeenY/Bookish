@@ -56,14 +56,18 @@ function App() {
 
 
   function handleSearch(){
-      const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(search.toLowerCase())}&key=AIzaSyAIH5tQralEtfJsBC834YFRNfOOekXrdJQ`
-      fetch(url)
-      .then(r=>r.json())
-      .then(data => setBookS(data))
+    let book = encodeURIComponent(search.toLowerCase())
+      // const url = `https://openlibrary.org/search.json?title=${encodeURIComponent(search.toLowerCase())}`
+      // fetch(url)
+      // .then(r=>r.json())
+      // .then(data => setBookS(data))
+    const response = httpClient.post("http://localhost:5555/search", {
+      "book": book
+    })
+    .then(data => {setBookS(data.data.volumeInfo)})
   }
-
   console.log(bookS)
-
+  
   function handleWorks(author){
     const url = `https://openlibrary.org/authors/${author}/works.json`
     fetch(url)

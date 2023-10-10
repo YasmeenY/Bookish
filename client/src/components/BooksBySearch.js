@@ -6,7 +6,7 @@ function BooksBySearch({bookS, handleBookDetails, linkSetter, history, loader}){
     if(bookS){
         return (
             <div className="search-results">
-                {bookS.docs?.map((book, index) => {
+                {bookS?.map((book, index) => {
                     return (
                         <div
                             className="book-box"
@@ -17,13 +17,7 @@ function BooksBySearch({bookS, handleBookDetails, linkSetter, history, loader}){
                                 history.push(`/book${book.key}`)}}
                         >
                             <BookBox
-                                cover = {
-                                    typeof book["cover_i"] === "undefined" 
-                                    ? 
-                                    `https://bookcart.azurewebsites.net/Upload/Default_image.jpg` 
-                                    :
-                                    `https://covers.openlibrary.org/b/id/${book["cover_i"]}-M.jpg`
-                                }
+                                cover = {book.imageLinks.thumbnail}
                                 title = {book.title}
                             />
                         </div>
