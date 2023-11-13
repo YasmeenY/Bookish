@@ -11,12 +11,14 @@ import InputAdornment from "@mui/material/InputAdornment";
 import "./App.css"
 
 
-function Search({SearchSetter, setGoogBooks, handleSearch, bookS, search, linkSetter, handleAuthorSearch, authorS, handleAuthorDetails, handleWorks}) {
+function Search({SearchSetter, setGoogBooks, handleSearch, bookS, search, handleAuthorSearch, authorS, handleAuthorDetails, handleWorks}) {
     const [change, setChange] = useState(false)
     const [loader, setLoader] = useState(false)
+
     function handleChange(change){
         setChange(change)
     }
+
     const history = useHistory();
         return (
             <div className="Sign">
@@ -82,12 +84,12 @@ function Search({SearchSetter, setGoogBooks, handleSearch, bookS, search, linkSe
                             handleAuthorDetails={handleAuthorDetails}
                             handleWorks={handleWorks}
                             loader={loader}
+                            setGoogBooks = {setGoogBooks}
                         />
                     </div>
                     ):(
                         <BooksBySearch
                             bookS={bookS}
-                            linkSetter={linkSetter}
                             history={history}
                             loader={loader}
                             setGoogBooks = {setGoogBooks}

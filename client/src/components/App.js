@@ -20,8 +20,6 @@ function App() {
   const [userData, setUserData] = useState("")
   const [search, setSearch] = useState("")
   const [bookS, setBookS] = useState("")
-  const [link, setLink] = useState("")
-  const [bookDetails, setBookDetails] = useState("")
   const [authorS, setAuthorS] = useState("")
   const [authorDetails, setAuthorDetails] = useState("")
   const [works, setWorks] = useState("")
@@ -29,7 +27,7 @@ function App() {
   const [BookLists, setBookList] = useState("")
   const [bookInList, setBookInList] = useState("")
   const [ bookLinks, setBookLinks ] = useState("")
-  const [googBooks, setGoogBooks] = useState("")
+  const [ googBooks, setGoogBooks ] = useState("")
 
   // function handleBookDetails(book){
   //   fetch(`https://openlibrary.org${book.key}.json`)
@@ -50,10 +48,6 @@ function App() {
     setSearch(search)
   }
 
-  function linkSetter(search){
-    setLink(search)
-  }
-
 
   function handleSearch(){
     let book = encodeURIComponent(search.toLowerCase())
@@ -63,10 +57,11 @@ function App() {
     .then(data => {setBookS(data.data)})
   }
   
-  function handleWorks(author){
-    const url = `https://openlibrary.org/authors/${author}/works.json`
-    fetch(url)
-    .then(r=>r.json())
+  function handleWorks(){
+    let works = encodeURIComponent(search.toLowerCase())
+    const response = httpClient.post("http://localhost:5555/search_works", {
+      "works": works
+    })
     .then(data => setWorks(data))
   }
 
@@ -78,10 +73,11 @@ function App() {
   }
 
   function handleAuthorSearch(){
-    const url = `https://openlibrary.org/search/authors.json?q=${encodeURIComponent(search.toLowerCase())}`
-    fetch(url)
-    .then(r=>r.json())
-    .then(data => setAuthorS(data))
+    let works = encodeURIComponent(search.toLowerCase())
+    const response = httpClient.post("http://localhost:5555/search_works", {
+      "works": works
+    })
+    .then(data => setAuthorS(data.data))
   }
 
   useEffect(() => {
@@ -199,7 +195,6 @@ function App() {
                   handleSearch = {handleSearch}
                   bookS = {bookS}
                   search = {search}
-                  linkSetter = {linkSetter}
                   setGoogBooks = {setGoogBooks}
                   handleAuthorSearch = {handleAuthorSearch}
                   authorS = {authorS}
@@ -212,7 +207,7 @@ function App() {
                   book = {googBooks.volumeInfo}
                 />
               </Route>
-              {authorS.docs?.map((author, index)=>{
+              {/* {authorS.docs?.map((author, index)=>{
                 return (
                   <Route key={index} exact path={`/author/${author.key}`}>
                     <AuthorDetails
@@ -230,8 +225,8 @@ function App() {
                     />
                   </Route>
                 )
-              })}
-              {authorBook ? (<div>
+              })} */}
+              {/* {authorBook ? (<div>
                 {works.entries?.map((work, index) => {
                 return(
                   <Route key={index} exact path={`/author${work.key}`}>
@@ -252,7 +247,7 @@ function App() {
                   </Route>
                 )
               })}
-              </div>):(<div></div>)}
+              </div>):(<div></div>)} */}
             </Switch>
         </ThemeContextProvider>
       </div>
