@@ -6,7 +6,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Person4Icon from '@mui/icons-material/Person4';
 import PasswordIcon from '@mui/icons-material/Password';
 
-function LogInForm() {
+function LogInForm({change}) {
     const [password, setPassword] = useState("")
     const [username, setUsername] = useState("")
 
@@ -31,10 +31,25 @@ function LogInForm() {
         }
     }
 
+    const Register = async () => {
+        try{
+            await httpClient.post("http://localhost:5555/signup", {
+                username,
+                password,
+            })
+            window.location.href = "/profile"
+        }
+        catch (error) {
+            if(error.response.status === 401){
+                alert("Invalid Credentials")
+            }
+        }
+    }
+
     return (
         <div className="container">
             <form action="#">
-                <h2 className="title">Sign in</h2>
+                {change === true ? (<h2>Sign Up</h2>):(<h2>Sign in</h2>)}
                 <div className="input-field">
                     <TextField
                         placeholder="Username"
@@ -69,7 +84,20 @@ function LogInForm() {
                         variant="standard"
                     />
                 </div>
-                <div 
+                {change === true ? (<div 
+                    className="buttons" 
+                    onClick={ () => Register() }
+                >
+                    <Button
+                        size="medium"
+                        variant="filledTonal"
+                        sx={{ m: 1 }}
+                    >
+                        Register
+                    </Button>
+                </div>):
+                
+                (<div 
                     className="buttons" 
                     onClick={ () => LogIn() }
                 >
@@ -80,7 +108,7 @@ function LogInForm() {
                     >
                         Log In
                     </Button>
-                </div>
+                </div>)}
             </form>
         </div>
     )}

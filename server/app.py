@@ -27,12 +27,11 @@ class Signup( Resource ):
 
         try:
             username = request.get_json()[ 'username' ]
-            email = request.get_json()[ 'email' ]
             password = request.get_json()[ 'password' ]
         except KeyError:
             return { "error": "Missing a required field in the form." }, 400
         
-        user_exists = User.query.filter_by(email=email).first() is not None
+        user_exists = User.query.filter_by(username=username).first() is not None
         
         if user_exists:
             return jsonify({"error": "User already exists"}, 409)
@@ -40,7 +39,6 @@ class Signup( Resource ):
         hashed_password = bcrypt.generate_password_hash(password.encode( 'utf-8' ))
         new_user = User(
             username = username,
-            email = email,
             password = hashed_password
         )
         db.session.add( new_user )
@@ -85,6 +83,7 @@ class CheckSession( Resource ):
             return user_to_dict( user ), 200
         else:
             return {}, 204
+
 class SearchBook( Resource ):
     def post( self ):
         api_key = "AIzaSyBCZqzHd9Ciqm480vxJVLx1mv2fCSaHfEg"
@@ -110,14 +109,13 @@ api.add_resource( Login, '/login', endpoint='login' )
 api.add_resource( Logout, '/logout', endpoint='logout' )
 api.add_resource( CheckSession, '/check_session', endpoint='check_session' )
 api.add_resource( SearchBook, '/search', endpoint='search' )
-api.add_resource( SearchWorks, '/search_works', endpoint='search_aworks' )
+api.add_resource( SearchWorks, '/search_works', endpoint='search_works' )
 
 def user_to_dict( user ):
     return {
         "id": user.id,
         "username": user.username,
         "password": user.password.decode( 'utf-8' ),
-        "email": user.email,
         "image": user.image
     }
 def list_to_dict( list ):

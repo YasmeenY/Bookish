@@ -4,15 +4,12 @@ import { Switch, Route } from "react-router-dom";
 import NavBar from "./NavBar";
 import httpClient from "./httpClient";
 import Home from "./Home";
-import Sign from './Sign';
 import Profile from "./Profile"
-import ThemeContextProvider from '../context/ThemeContext';
 import Search from "./Search";
 import BookDetails from './BookDetails';
-import AuthorDetails from './AuthorDetails';
-import AuthorWorks from './AuthorWorks';
 import BookList from './BookLists';
 import ListDetails from "./ListDetail";
+import UserForms from "./UserForms.js";
 import axios from 'axios';
 
 function App() {
@@ -21,28 +18,11 @@ function App() {
   const [search, setSearch] = useState("")
   const [bookS, setBookS] = useState("")
   const [authorS, setAuthorS] = useState("")
-  const [authorDetails, setAuthorDetails] = useState("")
-  const [works, setWorks] = useState("")
-  const [authorBook, setAuthorBook] = useState("")
   const [BookLists, setBookList] = useState("")
   const [bookInList, setBookInList] = useState("")
   const [ bookLinks, setBookLinks ] = useState("")
   const [ googBooks, setGoogBooks ] = useState("")
 
-  // function handleBookDetails(book){
-  //   fetch(`https://openlibrary.org${book.key}.json`)
-  //   .then(r=>r.json())
-  //   .then(data => {
-  //     setBookDetails(data)
-  //   })
-  // }
-
-  function handleAuthorBooks(book){
-    const url = `https://openlibrary.org/search.json?title=${encodeURIComponent(book.toLowerCase())}`
-    fetch(url)
-    .then(r=>r.json())
-    .then(data => setAuthorBook(data))
-  }
 
   function SearchSetter(search){
     setSearch(search)
@@ -55,21 +35,6 @@ function App() {
       "book": book
     })
     .then(data => {setBookS(data.data)})
-  }
-  
-  function handleWorks(){
-    let works = encodeURIComponent(search.toLowerCase())
-    const response = httpClient.post("http://localhost:5555/search_works", {
-      "works": works
-    })
-    .then(data => setWorks(data))
-  }
-
-  function handleAuthorDetails(author){
-    const url = `https://openlibrary.org/authors/${author}.json`
-    fetch(url)
-    .then(r=>r.json())
-    .then(data => setAuthorDetails(data))
   }
 
   function handleAuthorSearch(){
@@ -156,15 +121,13 @@ function App() {
   if (BookLists){
     return (
       <div className="App">
-        <ThemeContextProvider>
             <NavBar
               user = {user}
               data = {userData}
             />
             <Switch>
               <Route path='/' exact component={Home} />
-              {/* <Route path='/FzVjBgAAQBAJ' exact component={Testing} /> */}
-              <Route path='/sign' exact component={Sign} />
+              <Route path='/sign' exact component={UserForms} />
               <Route exact path="/profile">
                 <Profile
                   data = {userData}
@@ -198,58 +161,15 @@ function App() {
                   setGoogBooks = {setGoogBooks}
                   handleAuthorSearch = {handleAuthorSearch}
                   authorS = {authorS}
-                  handleAuthorDetails = {handleAuthorDetails}
-                  handleWorks = {handleWorks}
                 />
               </Route>
               <Route exact path ={`/${googBooks.id}`}>
                 <BookDetails
                   book = {googBooks.volumeInfo}
+                  userData = {userData}
                 />
               </Route>
-              {/* {authorS.docs?.map((author, index)=>{
-                return (
-                  <Route key={index} exact path={`/author/${author.key}`}>
-                    <AuthorDetails
-                      author = {author}
-                      authorDetails={authorDetails}
-                      works = {works}
-                      handleAuthorBooks={handleAuthorBooks}
-                      cover = {
-                        typeof authorDetails["photos"] === "undefined" 
-                        ? 
-                        `https://openlibrary.org/images/icons/avatar_author-lg.png` 
-                        :
-                        `https://covers.openlibrary.org/a/id/${authorDetails["photos"][0]}-M.jpg`
-                      }
-                    />
-                  </Route>
-                )
-              })} */}
-              {/* {authorBook ? (<div>
-                {works.entries?.map((work, index) => {
-                return(
-                  <Route key={index} exact path={`/author${work.key}`}>
-                    <AuthorWorks
-                      userData = {userData}
-                      book = {work}
-                      bookInList = {bookInList}
-                      bookS = {authorBook?.docs[0]}
-                      addBooktoLists = {addBooktoLists}
-                      cover = {
-                        typeof work["covers"] === "undefined" 
-                        ? 
-                        `https://bookcart.azurewebsites.net/Upload/Default_image.jpg` 
-                        :
-                        `https://covers.openlibrary.org/b/id/${work["covers"][0]}-M.jpg`
-                      }
-                    />
-                  </Route>
-                )
-              })}
-              </div>):(<div></div>)} */}
             </Switch>
-        </ThemeContextProvider>
       </div>
     );
   }

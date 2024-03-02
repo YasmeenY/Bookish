@@ -1,30 +1,10 @@
 import React from "react";
 import BookBox from "./BookBox";
 
-function AuthorsBySearch({authorS, history, handleAuthorDetails, handleWorks, loader, setGoogBooks}){
-    let authors = authorS.docs
-
-    console.log(authorS)
+function AuthorsBySearch({authorS, history, loader, setGoogBooks}){
 
     if(authorS){
         return(
-        //     <div className="search-results">
-        //         {
-        //             authors?.map((author, index) => {
-        //                 return(
-        //                     <div className="book-box" onClick={()=>{
-        //                         history.push(`/author/${author.key}`)
-        //                         handleAuthorDetails(author.key)
-        //                         handleWorks(author.key)
-        //                     }
-        //                     } key={index}>
-        //                         <h2>{author.name}</h2>
-        //                     </div>
-        //                 )
-        //             })
-        //         }
-        //     </div>
-        // )
         <div className="search-results">
             {authorS?.map((book, index) => {
                 return (
@@ -37,7 +17,11 @@ function AuthorsBySearch({authorS, history, handleAuthorDetails, handleWorks, lo
                         }}
                     >
                         <BookBox
-                            cover = {book.volumeInfo.imageLinks.thumbnail}
+                            cover = {
+                                book.volumeInfo.imageLinks === undefined
+                                    ? ""
+                                    : `${book.volumeInfo.imageLinks.thumbnail}`
+                            }
                             title = {book.volumeInfo.title}
                         />
                     </div>

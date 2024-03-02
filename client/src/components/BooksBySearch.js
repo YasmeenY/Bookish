@@ -18,7 +18,11 @@ function BooksBySearch({bookS, history, loader, setGoogBooks}){
                             }}
                         >
                             <BookBox
-                                cover = {book.volumeInfo.imageLinks.thumbnail}
+                                cover = {
+                                    book.volumeInfo.imageLinks === undefined
+                                        ? "https://mpd-biblio-covers.imgix.net/9781250272799.jpg?w=900"
+                                        : `${book.volumeInfo.imageLinks.thumbnail}`
+                                }
                                 title = {book.volumeInfo.title}
                             />
                         </div>

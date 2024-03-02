@@ -33,7 +33,9 @@ function ListDetails({book, userData, getBookLinks, bookLinks}){
                     <div className="detail-container">
                         <AddToListButton
                             userData = {userData}
-                            book = {book.key}
+                            id = {book.id}
+                            title = {book.title}
+                            cover = {book.cover}
                         />
                     </div>
                     ):(

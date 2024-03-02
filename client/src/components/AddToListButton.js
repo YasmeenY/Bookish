@@ -6,8 +6,7 @@ import Select from '@mui/material/Select';
 import httpClient from "./httpClient"
 import axios from "axios";
 
-function AddToListButton({userData, book}){
-    const [ bookData, setBookData ] = useState("")
+function AddToListButton({userData, id, title, cover}){
     const [listId, setListId] = useState(0)
 
     const handleChange = (e) => {
@@ -17,25 +16,13 @@ function AddToListButton({userData, book}){
 
     let userLists = userData.lists
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const response = await httpClient.get(`http://localhost:5555/books/${book}`)
-                setBookData(response.data)
-            }
-            catch (error) {
-                console.log("Can't get Book")
-            }
-        }) ()
-    }, [book])
-
     function addToList(listId){
         axios.post("http://localhost:5555/booksInLists", {
             "user_id": userData.id,
-            "book_id": bookData.id,
-            "book_name": bookData.title,
+            "book_id": id,
+            "book_name": title,
             "list_id": listId,
-            "book_cover": bookData.cover
+            "book_cover": cover
         })
     }
 

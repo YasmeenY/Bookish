@@ -11,7 +11,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import "./App.css"
 
 
-function Search({SearchSetter, setGoogBooks, handleSearch, bookS, search, handleAuthorSearch, authorS, handleAuthorDetails, handleWorks}) {
+function Search({SearchSetter, setGoogBooks, handleSearch, bookS, search, handleAuthorSearch, authorS}) {
     const [change, setChange] = useState(false)
     const [loader, setLoader] = useState(false)
 
@@ -71,7 +71,7 @@ function Search({SearchSetter, setGoogBooks, handleSearch, bookS, search, handle
                                     size="medium"
                                     variant="filledTonal"
                                     sx={{ m: 1 }}
-                                > {"Search By Author Name"} </Button>
+                                > {"Search Works By Author Name"} </Button>
                             </div>
                         </div>
                     </div>
@@ -81,8 +81,6 @@ function Search({SearchSetter, setGoogBooks, handleSearch, bookS, search, handle
                         <AuthorsBySearch
                             authorS={authorS}
                             history={history}
-                            handleAuthorDetails={handleAuthorDetails}
-                            handleWorks={handleWorks}
                             loader={loader}
                             setGoogBooks = {setGoogBooks}
                         />

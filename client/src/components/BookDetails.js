@@ -4,8 +4,6 @@ import AddToListButton from "./AddToListButton"
 
 function BookDetails({book, userData}) {
 
-    console.log(book)
-
     const subject_formatter = new Intl.ListFormat('en', { style: 'short', type: 'conjunction' });
     const subject = subject_formatter.format(book.categories)
 
@@ -26,16 +24,18 @@ function BookDetails({book, userData}) {
                             <div>Ratings average: {book.averageRating}</div>
                             <div>Ratings Count: {book.ratings_count}</div>
                         </div>
-                        {/* {userData !== "" ? (                  
+                        {userData !== "" ? (                  
                             <div className="detail-container">
                                 <AddToListButton
                                     userData = {userData}
-                                    book = {book.id}
+                                    id = {book.title}
+                                    title = {book.title}
+                                    cover = {book.imageLinks.thumbnail}
                                 />
                             </div>
                         ):(
                         <div></div>
-                        )} */}
+                        )}
                     </div>
                     <div className='right-div'>
                         <strong>Book Links:</strong>
