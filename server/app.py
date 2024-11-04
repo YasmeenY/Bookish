@@ -100,7 +100,7 @@ class CheckSession( Resource ):
             return {}, 204
 class SearchBook( Resource ):
     def post( self ):
-        api_key = "AIzaSyBCZqzHd9Ciqm480vxJVLx1mv2fCSaHfEg"
+        api_key = ""
         book = request.get_json()[ 'book' ] 
         url =f"https://www.googleapis.com/books/v1/volumes?q=intitle:{book}&startIndex=0&maxResults=40&key={api_key}" 
         response = urllib.request.urlopen(url) 
@@ -110,7 +110,7 @@ class SearchBook( Resource ):
 
 class SearchWorks( Resource ):
     def post( self ):
-        api_key = "AIzaSyBCZqzHd9Ciqm480vxJVLx1mv2fCSaHfEg"
+        api_key = ""
         author = request.get_json()[ 'works' ] 
         url =f"https://www.googleapis.com/books/v1/volumes?q=inauthor:{author}&startIndex=0&maxResults=40&key={api_key}" 
         response = urllib.request.urlopen(url) 
