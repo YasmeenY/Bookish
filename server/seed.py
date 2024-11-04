@@ -6,7 +6,6 @@ from models import db, User, Book, BookInList, List
 
 titles = open("./data/Titles.txt", "r")
 cover = open("./data/cover.txt", "r")
-authors = open("./data/author.txt", "r")
 isbn = open("./data/ISBN.txt", "r")
 ratings = open("./data/Ratings.txt", "r")
 count = open("./data/rating_count.txt", "r")
@@ -17,7 +16,6 @@ subjects = open("./data/subjects.txt", "r")
 if __name__ == '__main__':
 
     with app.app_context():
-        AUTHOR_NAMES = []
         COVERS = []
         RATINGS = []
         TITLES = []
@@ -28,8 +26,6 @@ if __name__ == '__main__':
         SUBJECTS = []
         KEY = sample(range(9999), 99)
 
-        for author in authors:
-            AUTHOR_NAMES.append(author.replace("\n",""))
         for image in cover:
             COVERS.append(image.replace("\n",""))
         for rate in ratings:
@@ -65,7 +61,6 @@ if __name__ == '__main__':
                 rating = RATINGS[i],
                 rating_count = COUNT[i],
                 cover = COVERS[i],
-                author = AUTHOR_NAMES[i],
                 subjects = SUBJECTS[i]
             )
             books.append(book)
@@ -74,10 +69,10 @@ if __name__ == '__main__':
 
         print("Seeding BookInList...")
         books_in_list = []
-        bl1 = BookInList(book_name = "Harry Potter and the Sorcerer's Stone", book_cover="http://books.google.com/books/content?id=9jA0BgAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", book_id = 1, list_id = 1, user_id = 1)
-        bl2 = BookInList(book_name = "The Alchemist (novel)", book_cover="http://books.google.com/books/content?id=pTr44Sx6oWQC&printsec=frontcover&img=1&zoom=1&source=gbs_api", book_id = 9, list_id = 2, user_id = 1)
-        bl3 = BookInList(book_name = "The Fellowship of the Ring", book_id = 5, book_cover="http://books.google.com/books/content?id=S35cUR-u4y4C&printsec=frontcover&img=1&zoom=1&source=gbs_api", list_id = 1, user_id = 1)
-        bl4 = BookInList(book_name = "Harry Potter and the Prisoner of Azkaban", book_cover="http://books.google.com/books/content?id=IZN5BgAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", book_id = 3, list_id = 2, user_id = 1)
+        bl1 = BookInList( book_id = 1, list_id = 1)
+        bl2 = BookInList( book_id = 9, list_id = 2)
+        bl3 = BookInList( list_id = 1, book_id = 1)
+        bl4 = BookInList( book_id = 3, list_id = 2)
         books_in_list.append(bl1)
         books_in_list.append(bl2)
         books_in_list.append(bl3)
