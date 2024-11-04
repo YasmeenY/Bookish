@@ -2,10 +2,11 @@ from flask import make_response, jsonify, request, session
 
 # Local imports
 from config import app, db, api, Resource, bcrypt
-from models import db, User, List, BookInList, Book, BookLink
+from models import db, User, List, BookInList, Book
 from sqlalchemy import func
 import urllib
 import json
+from werkzeug.security import generate_password_hash
 
 
 @app.route("/")
@@ -21,35 +22,47 @@ class ClearSession( Resource ):
 
         return {}, 204
 
-class Signup( Resource ):
-    
-    def post( self ):
+class Signup(Resource):
+    def post(self):
+        data = request.get_json()
+
+        # Check for required fields
+        if not data or 'username' not in data or 'password' not in data or 'email' not in data:
+            return {"error": "Missing required fields."}, 400
+        
+        username = data['username']
+        password = data['password']
+        email = data['email']
+
+        # Check if the user already exists
+        if User.query.filter_by(username=username).first() is not None:
+            return {"error": "User already exists."}, 409
+
+        # Hash the password
+        hashed_password = generate_password_hash(password)
+
+        # Create a new user
+        new_user = User(username=username, password=hashed_password, email=email)
 
         try:
-            username = request.get_json()[ 'username' ]
-            email = request.get_json()[ 'email' ]
-            password = request.get_json()[ 'password' ]
-        except KeyError:
-            return { "error": "Missing a required field in the form." }, 400
+            db.session.add(new_user)
+            db.session.commit()
+            session['user_id'] = new_user.id  # Optional: track user session
+            
+            # Successful response
+            return {
+                "message": "User created successfully",
+                "user": {
+                    "id": new_user.id,
+                    "username": new_user.username,
+                    "email": new_user.email
+                }
+            }, 201
         
-        user_exists = User.query.filter_by(email=email).first() is not None
+        except Exception as e:
+            db.session.rollback()
+            return {"error": "An error occurred during signup."}, 500
         
-        if user_exists:
-            return jsonify({"error": "User already exists"}, 409)
-        
-        hashed_password = bcrypt.generate_password_hash(password.encode( 'utf-8' ))
-        new_user = User(
-            username = username,
-            email = email,
-            password = hashed_password
-        )
-        db.session.add( new_user )
-        db.session.commit()
-
-        session[ 'user_id' ] = new_user.id
-        
-        return user_to_dict( new_user ), 201
-
 class Login( Resource ):
 
     def post( self ):
@@ -87,7 +100,7 @@ class CheckSession( Resource ):
             return {}, 204
 class SearchBook( Resource ):
     def post( self ):
-        api_key = "AIzaSyBCZqzHd9Ciqm480vxJVLx1mv2fCSaHfEg"
+        api_key = ""
         book = request.get_json()[ 'book' ] 
         url =f"https://www.googleapis.com/books/v1/volumes?q=intitle:{book}&startIndex=0&maxResults=40&key={api_key}" 
         response = urllib.request.urlopen(url) 
@@ -97,7 +110,7 @@ class SearchBook( Resource ):
 
 class SearchWorks( Resource ):
     def post( self ):
-        api_key = "AIzaSyBCZqzHd9Ciqm480vxJVLx1mv2fCSaHfEg"
+        api_key = ""
         author = request.get_json()[ 'works' ] 
         url =f"https://www.googleapis.com/books/v1/volumes?q=inauthor:{author}&startIndex=0&maxResults=40&key={api_key}" 
         response = urllib.request.urlopen(url) 
@@ -116,7 +129,7 @@ def user_to_dict( user ):
     return {
         "id": user.id,
         "username": user.username,
-        "password": user.password.decode( 'utf-8' ),
+        "password": user.password,
         "email": user.email,
         "image": user.image
     }
@@ -131,8 +144,6 @@ def book_in_list_to_dict( bl ):
         "id": bl.id,
         "book_id": bl.book_id,
         "list_id": bl.list_id,
-        "name": bl.book_name,
-        "cover": bl.book_cover
     }
 def link_to_dict( link ):
     return {
@@ -158,61 +169,66 @@ def book_to_dict( book ):
         "rating_count": book.rating_count
     }
 
+def get_user_with_lists_and_books(user):
+    user_dict = {
+        "id": user.id,
+        "username": user.username,
+        "email": user.email,
+        "lists": []  # This will hold the user's lists
+    }
+    for user_list in user.lists:  # Use 'lists' instead of 'books_in_lists'
+        list_dict = {
+            "id": user_list.id,
+            "name": user_list.name,
+            "books": [book_in_list_to_dict(book) for book in user_list.books]  # Assuming books are accessible through the list
+        }
+        user_dict["lists"].append(list_dict)
+    return user_dict
+
 @app.route("/users", methods=["GET"])
 def users():
     if request.method == "GET":
         users = [user_to_dict( user ) for user in User.query.all()]
         return make_response( jsonify( users ), 200)
 
-@app.route( '/users/<int:id>', methods=[ "GET", "DELETE", "PATCH" ] )
+@app.route('/users/<int:id>', methods=["GET", "DELETE", "PATCH"])
 def users_by_id(id):
-    user = User.query.filter( User.id == id ).first()
-    user_list = List.query.filter( List.user_id == id ).all()
-    if user:
-        if request.method == "GET":
-            user_dict =  user_to_dict( user)
-            user_dict["lists"] = [list_to_dict(r) for r in user_list]
-            for i in range(len(user_list)):
-                user_dict["lists"][i]["books"]= [book_in_list_to_dict(r) for r in BookInList.query.filter(BookInList.list_id == user_list[i].id).all()]
-            return make_response( jsonify( user_dict ), 200 )
-        
-        elif request.method == "DELETE":
-            List.query.filter_by( user_id = id ).delete()
-            BookInList.query.filter_by( user_id = id ).delete()
-            db.session.delete( user )
-            db.session.commit()
-            return make_response("", 204)
+    user = User.query.filter(User.id == id).first()
 
-        elif request.method == "PATCH":
-            user_data = request.get_json()
-            for attr in user_data:
-                setattr( user, attr, user_data[attr] )
-            db.session.add( user )
-            db.session.commit()
-            user_dict =  user_to_dict( user )
-            user_dict["lists"] = [list_to_dict(r) for r in user_list]
-            for i in range(len(user_list)):
-                user_dict["lists"][i]["books"]= [book_in_list_to_dict(r) for r in BookInList.query.filter(BookInList.list_id == user_list[i].id).all()]
-            return make_response( jsonify( user_dict ), 200 )
-    else:
-        return make_response( "User not found.", 404 )
-    
-@app.route("/users/lists", methods=["GET", "POST"])
-def lists():
+    if not user:
+        return make_response({"error": "User not found."}, 404)
+
     if request.method == "GET":
-        lists = [list_to_dict( list ) for list in List.query.all()]
-        return make_response( jsonify( lists ), 200)
-    if request.method == "POST":
-        name = request.get_json()[ 'name' ]
-        user_id = request.get_json()[ 'user_id' ]
-        new_list = List(
-            name = name,
-            user_id = user_id
-        )
-        db.session.add( new_list )
-        db.session.commit()
-        return make_response( jsonify( list_to_dict( new_list ) ), 201 )
+        user_dict = get_user_with_lists_and_books(user)
+        return make_response(jsonify(user_dict), 200)
 
+    elif request.method == "DELETE":
+        try:
+            # Delete related lists and books first
+            List.query.filter_by(user_id=id).delete()
+            BookInList.query.filter_by(user_id=id).delete()
+            db.session.delete(user)
+            db.session.commit()
+            return make_response({"message": "User deleted."}, 204)
+        except Exception as e:
+            db.session.rollback()
+            return make_response({"error": "Failed to delete user."}, 500)
+
+    elif request.method == "PATCH":
+        user_data = request.get_json()
+
+        # Update user attributes
+        for attr, value in user_data.items():
+            setattr(user, attr, value)
+
+        try:
+            db.session.commit()
+            user_dict = get_user_with_lists_and_books(user)
+            return make_response(jsonify(user_dict), 200)
+        except Exception as e:
+            db.session.rollback()
+            return make_response({"error": "Failed to update user."}, 500)
+        
 @app.route( '/users/lists/<int:id>', methods=[ "GET", "DELETE" ])
 def lists_by_id(id):
     list = List.query.filter( List.id == id ).first()
@@ -237,16 +253,10 @@ def Books_in_List():
     if request.method == "POST":
         book_id = request.get_json()[ 'book_id' ]
         list_id = request.get_json()[ 'list_id' ]
-        user_id = request.get_json()[ 'user_id' ]
-        book_cover = request.get_json()[ 'book_cover' ]
-        book_name = request.get_json()[ 'book_name' ]
 
         new_book_in_list = BookInList(
             book_id = book_id,
             list_id = list_id,
-            user_id = user_id,
-            book_cover = book_cover,
-            book_name = book_name
         )
         db.session.add( new_book_in_list )
         db.session.commit()
@@ -267,8 +277,8 @@ def Books():
 
     if request.method == "POST":
         new_Book = Book(
-            title = request.get_json()[ 'title' ],
             key = request.get_json()[ 'key' ],
+            title = request.get_json()[ 'title' ],
             description = request.get_json()[ 'description' ],
             publisher = request.get_json()[ 'publisher' ],
             language = request.get_json()[ 'language' ],
@@ -280,6 +290,11 @@ def Books():
             cover = request.get_json()[ 'cover' ],
             subjects = request.get_json()[ 'subjects' ]
         )
+
+        # book_exists = Book.query.filter_by(key=key).first() is not None
+        
+        # if book_exists:
+        #     return jsonify({"error": "Book already exists"}, 409)
 
         db.session.add( new_Book )
         db.session.commit()
@@ -307,28 +322,28 @@ def get_book_by_key(key):
         book_dict = book_to_dict(book)
         return make_response( jsonify( book_dict ), 200)
     
-@app.route( '/links', methods=[ "POST" ])
-def post_link():
-    if request.method == "POST":
-        name = request.get_json()[ 'name' ]
-        book_key = request.get_json()[ 'book_key' ]
-        url = request.get_json()[ 'url' ]
+# @app.route( '/links', methods=[ "POST" ])
+# def post_link():
+#     if request.method == "POST":
+#         name = request.get_json()[ 'name' ]
+#         book_key = request.get_json()[ 'book_key' ]
+#         url = request.get_json()[ 'url' ]
 
-        new_link = BookLink(
-            name = name,
-            book_key = book_key,
-            url = url
-        )
-        db.session.add( new_link )
-        db.session.commit()
-        return make_response( jsonify( link_to_dict(new_link) ), 201)
+#         new_link = BookLink(
+#             name = name,
+#             book_key = book_key,
+#             url = url
+#         )
+#         db.session.add( new_link )
+#         db.session.commit()
+#         return make_response( jsonify( link_to_dict(new_link) ), 201)
 
-@app.route( '/books/links/<string:key>', methods=["GET"])
-def get_add_links(key):
-    if request.method == "GET":
-        links = BookLink.query.filter(BookLink.book_key == key).all()
-        link_dict = [link_to_dict(l) for l in links]
-        return make_response( jsonify( link_dict ), 200)
+# @app.route( '/books/links/<string:key>', methods=["GET"])
+# def get_add_links(key):
+#     if request.method == "GET":
+#         links = BookLink.query.filter(BookLink.book_key == key).all()
+#         link_dict = [link_to_dict(l) for l in links]
+#         return make_response( jsonify( link_dict ), 200)
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
